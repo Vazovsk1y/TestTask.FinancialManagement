@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{159A0A56-6926-41E1-89A5-6AE22C3D19EA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{5E8272AF-D6BE-427D-A7FC-5BD48B81B53A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask.Domain", "src\Core\TestTask.Domain\TestTask.Domain.csproj", "{6DD927D6-CAB5-4C70-B452-2D2819A53448}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6DD927D6-CAB5-4C70-B452-2D2819A53448}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DD927D6-CAB5-4C70-B452-2D2819A53448}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DD927D6-CAB5-4C70-B452-2D2819A53448}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DD927D6-CAB5-4C70-B452-2D2819A53448}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5E8272AF-D6BE-427D-A7FC-5BD48B81B53A} = {159A0A56-6926-41E1-89A5-6AE22C3D19EA}
+		{6DD927D6-CAB5-4C70-B452-2D2819A53448} = {5E8272AF-D6BE-427D-A7FC-5BD48B81B53A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CA76B61-641E-4EE2-9282-2B66DEA2C9CF}
+	EndGlobalSection
+EndGlobal
