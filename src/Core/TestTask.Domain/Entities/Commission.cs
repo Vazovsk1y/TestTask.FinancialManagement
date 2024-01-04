@@ -8,11 +8,11 @@ public class Commission : Entity<CommissionId>
 
 	public required CurrencyId CurrencyFromId { get; init; }
 
-	public required Currency CurrencyToId { get; init; }
+	public required CurrencyId CurrencyToId { get; init; }
 
 	public required decimal Value { get; init; }
 
-	private Commission() : base() { }
+	public Commission() : base() { }
 }
 
 public record CommissionId(Guid Value) : IValueId<CommissionId>

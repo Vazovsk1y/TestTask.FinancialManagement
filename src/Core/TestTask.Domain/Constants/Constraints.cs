@@ -7,6 +7,8 @@ public static partial class Constraints
 	public static class Commission
 	{
 		public const decimal MaxCommissionValue = 0.3m;
+
+		public static readonly (int Precision, int Scale) ValuePrecision = (4, 2);
 	}
 
 	public static class Currency
@@ -16,7 +18,7 @@ public static partial class Constraints
 
 	public static class CurrencyCodes
 	{
-		private const int CodeLength = 3;
+		public const int CodeLength = 3;
 
 		public static bool IsNumericCode(string numericCode)
 		{
@@ -68,5 +70,15 @@ public static partial class Constraints
 	{
 		[GeneratedRegex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")]
 		private static partial Regex PasswordRegex();
+	}
+
+	public static class MoneyAccount
+	{
+		public static readonly (int Precision, int Scale) BalancePrecision = (19, 4);
+	}
+
+	public static class MoneyOperation
+	{
+		public static readonly (int Precision, int Scale) MoneyAmountPrecision = (19, 4);
 	}
 }
