@@ -10,6 +10,10 @@ public class MoneyAccount : Entity<MoneyAccountId>
 
 	public required decimal Balance { get; set; }
 
+	public Currency? Currency { get; set; }
+
+	public User? User { get; set; }
+
 	public MoneyAccount() : base() { }
 }
 

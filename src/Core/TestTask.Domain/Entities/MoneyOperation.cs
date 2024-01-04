@@ -11,6 +11,8 @@ public class MoneyOperation : Entity<MoneyOperationId>
 
 	public CommissionId? CommissionId { get; init; }
 
+	public Commission? Commission { get; set; }
+
 	public required decimal MoneyAmount { get; init; }
 
 	public required DateTimeOffset OperationDate { get; init; }
