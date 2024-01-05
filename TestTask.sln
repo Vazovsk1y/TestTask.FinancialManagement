@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestTask.DAL", "src\Infrastructure\TestTask.DAL\TestTask.DAL.csproj", "{3FD05A98-F550-4785-913F-112BFD431F2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask.Application.Implementation", "src\Application\TestTask.Application.Implementation\TestTask.Application.Implementation.csproj", "{8C92E80F-C596-40B9-A571-399A4374DA5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{3FD05A98-F550-4785-913F-112BFD431F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FD05A98-F550-4785-913F-112BFD431F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FD05A98-F550-4785-913F-112BFD431F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C92E80F-C596-40B9-A571-399A4374DA5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C92E80F-C596-40B9-A571-399A4374DA5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C92E80F-C596-40B9-A571-399A4374DA5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C92E80F-C596-40B9-A571-399A4374DA5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{1EDF275D-51FD-446F-8909-5BD51CB1B2E0} = {DD159A36-4A02-4EC7-ADAA-96084BB8AD00}
 		{469E8A16-F195-47C6-9F19-84C0CEB49BED} = {159A0A56-6926-41E1-89A5-6AE22C3D19EA}
 		{3FD05A98-F550-4785-913F-112BFD431F2D} = {469E8A16-F195-47C6-9F19-84C0CEB49BED}
+		{8C92E80F-C596-40B9-A571-399A4374DA5E} = {DD159A36-4A02-4EC7-ADAA-96084BB8AD00}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4CA76B61-641E-4EE2-9282-2B66DEA2C9CF}
