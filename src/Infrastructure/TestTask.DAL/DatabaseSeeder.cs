@@ -40,14 +40,14 @@ internal static class DatabaseSeeder
 		{
 			FullName = "Mike Vazovskiy",
 			Email = "penis@gmail.com",
-			Password = "penisPopka",
+			Password = "penisPopka228#",
 			Roles = [DefaultRoles.User, DefaultRoles.Admin] 
 		},
 		new()
 		{
 			FullName = "John Doe",
 			Email = "popka@gmail.com",
-			Password = "penisPopka",
+			Password = "penisPopka228#",
 			Roles = [DefaultRoles.User]
 		}
 	};

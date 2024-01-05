@@ -11,11 +11,37 @@ namespace TestTask.Application.Implementation.Services;
 
 internal class UserService(
 	TestTaskDbContext dbContext,
-	IValidator<UserRegisterDTO> userRegisterDtoValidator) : IUserService
+	IValidator<UserRegisterDTO> userRegisterDtoValidator,
+	IValidator<UserCredentialsDTO> credentialsValidator,
+	ITokenProvider tokenProvider) : IUserService
 {
-	public Task<Result<TokenDTO>> LoginAsync(UserCredentialsDTO credentialsDTO, CancellationToken cancellationToken = default)
+	public async Task<Result<TokenDTO>> LoginAsync(UserCredentialsDTO credentialsDTO, CancellationToken cancellationToken = default)
 	{
-		throw new NotImplementedException();
+		var validationResult = credentialsValidator.Validate(credentialsDTO);
+		if (!validationResult.IsValid)
+		{
+			return Result.Failure<TokenDTO>(validationResult.ToString());
+		}
+
+		var user = await dbContext
+			.Users
+			.Include(e => e.Roles)
+			.ThenInclude(e => e.Role)
+			.SingleOrDefaultAsync(e => e.Email == credentialsDTO.Email, cancellationToken);
+
+		if (user is null)
+		{
+			return Result.Failure<TokenDTO>(Errors.Auth.InvalidCredentials);
+		}
+
+		if (!BCrypt.Net.BCrypt.Verify(credentialsDTO.Password, user.PasswordHash))
+		{
+			return Result.Failure<TokenDTO>(Errors.Auth.InvalidCredentials);
+		}
+
+		string token = tokenProvider.GenerateToken(user);
+
+		return new TokenDTO(token);
 	}
 
 	public async Task<Result<UserId>> RegisterAsync(UserRegisterDTO registerDTO, CancellationToken cancellationToken = default)
