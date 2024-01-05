@@ -1,12 +1,16 @@
-﻿using TestTask.Application.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using TestTask.Application.Common;
+using TestTask.Application.Contracts;
 using TestTask.Application.Services;
+using TestTask.DAL;
 
 namespace TestTask.Application.Implementation.Services;
 
-internal class CurrencyService : ICurrencyService
+internal class CurrencyService(TestTaskDbContext dbContext) : ICurrencyService
 {
-	public Task<IReadOnlyCollection<CurrencyDTO>> GetAllAsync(CancellationToken cancellationToken = default)
+	public async Task<Result<IReadOnlyCollection<CurrencyDTO>>> GetAllAsync(CancellationToken cancellationToken = default)
 	{
-		throw new NotImplementedException();
+		var result = await dbContext.Currencies.Select(e => e.ToDTO()).ToListAsync(cancellationToken);
+		return result;
 	}
 }
