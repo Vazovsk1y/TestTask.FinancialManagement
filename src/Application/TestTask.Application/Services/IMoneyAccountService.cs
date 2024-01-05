@@ -6,7 +6,7 @@ namespace TestTask.Application.Services;
 
 public interface IMoneyAccountService
 {
-	Task<Result<IReadOnlyCollection<MoneyAccountDTO>>> GetAllByUserIdAsync(UserId userId, CancellationToken cancellationToken = default);
+	Task<Result<IReadOnlyCollection<MoneyAccountDTO>>> GetAllByUserIdAsync(UserId requesterId, CancellationToken cancellationToken = default);
 
 	Task<Result<MoneyAccountDTO>> GetByIdAsync(UserId requesterId, MoneyAccountId moneyAccountId, CancellationToken cancellationToken = default);
 

@@ -19,4 +19,9 @@ public static class Extensions
 	{
 		return user.Roles.Any(e => e.RoleId == roleId);
 	}
+
+	internal static async Task<User?> GetById(this IQueryable<User> users, UserId userId)
+	{
+		return await users.SingleOrDefaultAsync(e => e.Id == userId);
+	}
 }

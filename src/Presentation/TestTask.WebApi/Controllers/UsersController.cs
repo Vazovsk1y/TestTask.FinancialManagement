@@ -5,7 +5,9 @@ using TestTask.WebApi.ViewModels;
 
 namespace TestTask.WebApi.Controllers;
 
-public class UsersController(IUserService userService) : BaseController
+public class UsersController(
+	IUserService userService
+	) : BaseController
 {
 	[HttpPost("sign-up")]
 	public async Task<IActionResult> RegisterUser(UserRegisterModel registerModel, CancellationToken cancellationToken)

@@ -14,7 +14,7 @@ public static class Extensions
 		context.Database.Migrate();
 	}
 
-	public static UserId GetUserId(this HttpContext httpContext)
+	public static UserId GetAuthenticatedUserId(this HttpContext httpContext)
 	{
 		var id = Guid.Parse(httpContext.User.Claims.Single(e => e.Type == ClaimTypes.NameIdentifier).Value);
 		return new UserId(id);
