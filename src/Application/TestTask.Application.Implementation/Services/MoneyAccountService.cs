@@ -40,6 +40,7 @@ internal class MoneyAccountService(
 	{
 		var result = await dbContext
 			.MoneyAccounts
+			.AsNoTracking()
 			.Include(e => e.Currency)
 			.Where(e => e.UserId == requesterId)
 			.Select(e => e.ToDTO())
@@ -48,9 +49,20 @@ internal class MoneyAccountService(
 		return result;
 	}
 
-	public Task<Result<MoneyAccountDTO>> GetByIdAsync(UserId requesterId, MoneyAccountId moneyAccountId, CancellationToken cancellationToken = default)
+	public async Task<Result<MoneyAccountDTO>> GetByIdAsync(UserId requesterId, MoneyAccountId moneyAccountId, CancellationToken cancellationToken = default)
 	{
-		throw new NotImplementedException();
+		if (!await dbContext.Users.AnyAsync(e => e.Id == requesterId, cancellationToken))
+		{
+			return Result.Failure<MoneyAccountDTO>(Errors.EntityWithPassedIdIsNotExists(nameof(User)));
+		}
+
+		var moneyAccount = await dbContext
+			.MoneyAccounts
+			.AsNoTracking()
+			.Include(e => e.Currency)
+			.SingleOrDefaultAsync(e => e.Id == moneyAccountId && e.UserId == requesterId, cancellationToken);
+
+		return moneyAccount is null ? Result.Failure<MoneyAccountDTO>(Errors.EntityWithPassedIdIsNotExists(nameof(MoneyAccount))) : moneyAccount.ToDTO();
 	}
 
 	private async Task<Result<MoneyAccount>> CreateMoneyAccount(User user, CurrencyId currencyId)
