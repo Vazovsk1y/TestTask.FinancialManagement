@@ -69,7 +69,7 @@ public static partial class Constraints
 	public static partial class Credentials
 	{
 		[GeneratedRegex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")]
-		private static partial Regex PasswordRegex();
+		public static partial Regex PasswordRegex();
 	}
 
 	public static class MoneyAccount

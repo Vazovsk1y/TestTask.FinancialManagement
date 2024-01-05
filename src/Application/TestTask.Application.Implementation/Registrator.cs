@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using TestTask.Application.Implementation.Services;
+using TestTask.Application.Implementation.Validators;
 using TestTask.Application.Services;
 
 namespace TestTask.Application.Implementation;
@@ -12,5 +14,6 @@ public static class Registrator
 		.AddScoped<IMoneyOperationService,  MoneyOperationService>()
 		.AddScoped<ICurrencyService, CurrencyService>()
 		.AddScoped<ICommissionService, CommissionService>()
+		.AddValidatorsFromAssembly(typeof(UserCredentialsDTOValidator).Assembly)
 		;
 }
