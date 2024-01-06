@@ -1,4 +1,5 @@
 ﻿using TestTask.Application.Contracts;
+using TestTask.Domain.Entities;
 using TestTask.WebApi.ViewModels;
 
 namespace TestTask.WebApi;
@@ -18,5 +19,10 @@ public static class Mapper
 	public static CurrencyAddDTO ToDTO(this CurrencyAddModel model)
 	{
 		return new CurrencyAddDTO(model.Title, model.NumericCode, model.AlphabeticCode);
+	}
+
+	public static EnrollDTO ToDTO(this EnrollModel model)
+	{
+		return new EnrollDTO(model.MoneyAmount, new MoneyAccountId(model.MoneyAccountId));
 	}
 }

@@ -17,13 +17,6 @@ public class MoneyAccountsController(
 		return result.IsSuccess ? Ok() : BadRequest(result.ErrorMessage);
 	}
 
-	[HttpGet("by-userId/{userId}")]
-	public async Task<IActionResult> GetAssociatedWithUserMoneyAccounts(Guid userId, CancellationToken cancellationToken)
-	{
-		var result = await moneyAccountService.GetAllByUserIdAsync(new UserId(userId), cancellationToken);
-		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
-	}
-
 	[HttpGet("{id}")]
 	public async Task<IActionResult> GetMoneyAccountById(Guid id, CancellationToken cancellationToken)
 	{

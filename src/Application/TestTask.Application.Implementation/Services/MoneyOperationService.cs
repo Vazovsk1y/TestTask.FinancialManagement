@@ -1,15 +1,52 @@
-﻿using TestTask.Application.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using TestTask.Application.Common;
 using TestTask.Application.Contracts;
 using TestTask.Application.Services;
+using TestTask.DAL;
 using TestTask.Domain.Entities;
+using TestTask.Domain.Enums;
 
 namespace TestTask.Application.Implementation.Services;
 
-internal class MoneyOperationService : IMoneyOperationService
+internal class MoneyOperationService : BaseService, IMoneyOperationService
 {
-	public Task<Result<MoneyOperationId>> EnrollAsync(EnrollDTO enrollDTO, CancellationToken cancellationToken = default)
+	private readonly IClock _clock;
+	public MoneyOperationService(TestTaskDbContext dbContext, IUserProvider userProvider, IServiceScopeFactory serviceScopeFactory, IClock clock) : base(dbContext, userProvider, serviceScopeFactory)
 	{
-		throw new NotImplementedException();
+		_clock = clock;
+	}
+
+	public async Task<Result<MoneyOperationId>> EnrollAsync(EnrollDTO enrollDTO, CancellationToken cancellationToken = default)
+	{
+		var validationResult = Validate(enrollDTO);
+		if (validationResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperationId>(validationResult.ErrorMessage);
+		}
+
+		var account = await _dbContext
+			.MoneyAccounts
+			.SingleOrDefaultAsync(e => e.Id == enrollDTO.MoneyAccountToId, cancellationToken);
+
+		if (account is null)
+		{
+			return Result.Failure<MoneyOperationId>(Errors.EntityWithPassedIdIsNotExists(nameof(MoneyAccount)));
+		}
+
+		account.Balance += enrollDTO.MoneyAmount;
+		var operation = new MoneyOperation
+		{
+			MoneyAmount = enrollDTO.MoneyAmount,
+			MoneyAccountToId = account.Id,
+			MoveType = MoneyMoveTypes.Adding,
+			OperationDate = _clock.GetUtcNow(),
+			OperationType = MoneyOperationTypes.Enrolment,
+		};
+
+		_dbContext.MoneyOperations.Add(operation);
+		await _dbContext.SaveChangesAsync(cancellationToken);
+		return operation.Id;
 	}
 
 	public Task<Result<IReadOnlyCollection<MoneyOperationDTO>>> GetAllByMoneyAccountIdAsync(UserId requesterId, MoneyAccountId moneyAccountId, CancellationToken cancellationToken = default)

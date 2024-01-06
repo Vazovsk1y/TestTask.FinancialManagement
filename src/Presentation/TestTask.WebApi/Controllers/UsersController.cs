@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TestTask.Application.Services;
+using TestTask.Domain.Entities;
 using TestTask.WebApi.Common;
 using TestTask.WebApi.ViewModels;
 
 namespace TestTask.WebApi.Controllers;
 
 public class UsersController(
-	IUserService userService
+	IUserService userService,
+	IMoneyAccountService moneyAccountService
 	) : BaseController
 {
 	[HttpPost("sign-up")]
@@ -23,5 +26,13 @@ public class UsersController(
 		var dto = credentialsModel.ToDTO();
 		var result = await userService.LoginAsync(dto, cancellationToken);
 		return result.IsSuccess ? Ok(result.Value.TokenValue) : BadRequest(result.ErrorMessage);
+	}
+
+	[HttpGet("{id}/money-accounts")]
+	[Authorize]
+	public async Task<IActionResult> GetAssociatedWithUserMoneyAccounts(Guid id, CancellationToken cancellationToken)
+	{
+		var result = await moneyAccountService.GetAllByUserIdAsync(new UserId(id), cancellationToken);
+		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
 	}
 }
