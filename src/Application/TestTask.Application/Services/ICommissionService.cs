@@ -6,5 +6,5 @@ namespace TestTask.Application.Services;
 
 public interface ICommissionService
 {
-	Task<Result<CommissionId>> CreateAsync(UserId requesterId, CommissionCreateDTO commissionCreateDTO, CancellationToken cancellationToken = default);
+	Task<Result<CommissionId>> AddAsync(CommissionAddDTO commissionAddDTO, CancellationToken cancellationToken = default);
 }
