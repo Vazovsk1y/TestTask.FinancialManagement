@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using TestTask.Application.Contracts;
 using TestTask.WebApi.ViewModels;
 
 namespace TestTask.WebApi.Validators;

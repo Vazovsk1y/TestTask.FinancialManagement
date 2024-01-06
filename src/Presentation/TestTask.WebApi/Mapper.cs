@@ -14,4 +14,9 @@ public static class Mapper
 	{
 		return new UserRegisterDTO(model.FullName, model.Credentials.ToDTO());
 	}
+
+	public static CurrencyAddDTO ToDTO(this CurrencyAddModel model)
+	{
+		return new CurrencyAddDTO(model.Title, model.NumericCode, model.AlphabeticCode);
+	}
 }

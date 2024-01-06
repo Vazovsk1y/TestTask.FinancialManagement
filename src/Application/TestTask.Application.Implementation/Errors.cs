@@ -4,6 +4,8 @@ public static class Errors
 {
 	public static string EntityWithPassedIdIsNotExists(string entityName) => $"{entityName} with passed id is not exists.";
 
+	public static string EntityWithPropertyIsAlreadyExists(string entityName, string propertyName) => $"{entityName} with passed {propertyName} is already exists.";
+
 	public const string EmailIsAlreadyTaken = "Email is already taken.";
 
 	public static class Auth
