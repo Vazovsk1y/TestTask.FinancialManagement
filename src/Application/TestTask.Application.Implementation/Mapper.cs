@@ -14,4 +14,19 @@ public static class Mapper
 	{
 		return new CurrencyDTO(currency.Id, currency.Title, currency.NumericCode, currency.AlphabeticCode);
 	}
+
+	public static MoneyOperationDTO ToDTO(this MoneyOperation moneyOperation)
+	{
+		return new MoneyOperationDTO(
+			moneyOperation.Id, 
+			moneyOperation.MoneyAccountFromId,
+			moneyOperation.MoneyAccountToId,
+			moneyOperation.MoveType,
+			moneyOperation.OperationType,
+			moneyOperation.MoneyAmount,
+			moneyOperation.AppliedCommissionValue,
+			moneyOperation.AppliedExchangeRate,
+			moneyOperation.OperationDate
+			);
+	}
 }

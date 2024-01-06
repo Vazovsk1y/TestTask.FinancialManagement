@@ -9,7 +9,8 @@ namespace TestTask.WebApi.Controllers;
 
 public class UsersController(
 	IUserService userService,
-	IMoneyAccountService moneyAccountService
+	IMoneyAccountService moneyAccountService,
+	IMoneyOperationService moneyOperationService
 	) : BaseController
 {
 	[HttpPost("sign-up")]
@@ -33,6 +34,14 @@ public class UsersController(
 	public async Task<IActionResult> GetAssociatedWithUserMoneyAccounts(Guid id, CancellationToken cancellationToken)
 	{
 		var result = await moneyAccountService.GetAllByUserIdAsync(new UserId(id), cancellationToken);
+		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
+	}
+
+	[HttpGet("{id}/money-operations")]
+	[Authorize]
+	public async Task<IActionResult> GetAssociatedWithUserMoneyOperations(Guid id, CancellationToken cancellationToken)
+	{
+		var result = await moneyOperationService.GetAllByUserIdAsync(new UserId(id), cancellationToken);
 		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
 	}
 }

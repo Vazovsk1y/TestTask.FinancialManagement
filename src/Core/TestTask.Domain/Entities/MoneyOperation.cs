@@ -9,9 +9,9 @@ public class MoneyOperation : Entity<MoneyOperationId>
 
 	public MoneyAccountId? MoneyAccountToId { get; init; }
 
-	public CommissionId? CommissionId { get; init; }
+	public required decimal AppliedCommissionValue { get; init; }
 
-	public Commission? Commission { get; set; }
+	public required decimal AppliedExchangeRate { get; init; }
 
 	public required decimal MoneyAmount { get; init; }
 

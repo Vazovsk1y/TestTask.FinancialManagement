@@ -17,11 +17,8 @@ internal class MoneyOperationConfiguration : IEntityTypeConfiguration<MoneyOpera
 
 		builder.Property(e => e.MoneyAmount).HasPrecision(Constraints.MoneyOperation.MoneyAmountPrecision.Precision, Constraints.MoneyOperation.MoneyAmountPrecision.Scale);
 
-		builder
-			.HasOne(e => e.Commission)
-			.WithMany()
-			.HasForeignKey(e => e.CommissionId)
-			.IsRequired(false);
+		builder.Property(e => e.AppliedCommissionValue).HasPrecision(Constraints.Commission.ValuePrecision.Precision, Constraints.Commission.ValuePrecision.Precision);
+		builder.Property(e => e.AppliedExchangeRate).HasPrecision(Constraints.MoneyOperation.MoneyAmountPrecision.Precision, Constraints.MoneyOperation.MoneyAmountPrecision.Scale);
 
 		builder.ConfigureNullableValueIdProperty(e => e.MoneyAccountFromId);
 		builder.ConfigureNullableValueIdProperty(e => e.MoneyAccountToId);

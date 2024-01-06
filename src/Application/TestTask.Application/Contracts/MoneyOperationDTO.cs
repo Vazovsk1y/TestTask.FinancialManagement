@@ -13,6 +13,7 @@ public record MoneyOperationDTO(
 	[property: JsonConverter(typeof(JsonStringEnumConverter))]
 	MoneyOperationTypes OperationType,
 	decimal MoneyAmount,
-	decimal? CommissionValue,
+	decimal CommissionValue,
+	decimal ExchangeRate,
 	DateTimeOffset OperationDate
 	);

@@ -42,6 +42,25 @@ namespace TestTask.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MoneyOperations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MoneyAccountFromId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MoneyAccountToId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AppliedCommissionValue = table.Column<decimal>(type: "decimal(4,4)", precision: 4, scale: 4, nullable: false),
+                    AppliedExchangeRate = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    MoneyAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
+                    OperationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    OperationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MoveType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MoneyOperations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
@@ -65,29 +84,6 @@ namespace TestTask.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MoneyOperations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MoneyAccountFromId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    MoneyAccountToId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CommissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    MoneyAmount = table.Column<decimal>(type: "decimal(19,4)", precision: 19, scale: 4, nullable: false),
-                    OperationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    OperationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MoveType = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MoneyOperations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MoneyOperations_Commissions_CommissionId",
-                        column: x => x.CommissionId,
-                        principalTable: "Commissions",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -145,11 +141,11 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "Id", "CurrencyFromId", "CurrencyToId", "Value" },
                 values: new object[,]
                 {
-                    { new Guid("076b3d84-c7cb-423d-81bd-788e44f676a4"), new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"), new Guid("c9f2924e-523c-46b1-bdd1-404b3a972d41"), 0.15m },
-                    { new Guid("58290782-772c-4e3e-af67-1435299ccaae"), new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"), new Guid("18081637-6a28-4de3-a797-4eb340092044"), 0.21m },
-                    { new Guid("90dddea6-03ba-4de6-bb34-c9c53d80cd35"), new Guid("fe59caa8-249c-4db5-b700-f40e3acade15"), new Guid("18081637-6a28-4de3-a797-4eb340092044"), 0.14m },
-                    { new Guid("9baa1ddf-7294-431f-8701-6cbe66109a63"), new Guid("18081637-6a28-4de3-a797-4eb340092044"), new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"), 0.1m },
-                    { new Guid("a22532ba-a850-425c-9ee8-19266e29bc26"), new Guid("18081637-6a28-4de3-a797-4eb340092044"), new Guid("fe59caa8-249c-4db5-b700-f40e3acade15"), 0.08m }
+                    { new Guid("1e5ae49d-9d21-44e3-a35f-121d41c96f5c"), new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), 0.1m },
+                    { new Guid("29866c48-8153-4bb8-a438-010aee0a0f38"), new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), 0.21m },
+                    { new Guid("7dd318c2-b785-4ace-86fb-85cbfa3b7b4e"), new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"), 0.08m },
+                    { new Guid("9d04d7e2-cd09-4b46-8234-4fcbc534eb7d"), new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"), 0.15m },
+                    { new Guid("b3ff0421-30aa-4402-85e3-0d7c2ef618cc"), new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"), new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), 0.14m }
                 });
 
             migrationBuilder.InsertData(
@@ -157,12 +153,12 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "Id", "AlphabeticCode", "NumericCode", "Title" },
                 values: new object[,]
                 {
-                    { new Guid("18081637-6a28-4de3-a797-4eb340092044"), "UAH", "980", "Ukrainian Hryvnia" },
-                    { new Guid("98d7a0df-d4af-4408-85e3-19ad0c74ed5b"), "GBP", "826", "British Pound Sterling" },
-                    { new Guid("99b68f3a-c560-4b60-ae7a-b500828197e8"), "JPY", "392", "Japanese Yen" },
-                    { new Guid("c9f2924e-523c-46b1-bdd1-404b3a972d41"), "EUR", "978", "Euro" },
-                    { new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"), "RUB", "643", "Russian Ruble" },
-                    { new Guid("fe59caa8-249c-4db5-b700-f40e3acade15"), "USD", "840", "United States Dollar" }
+                    { new Guid("0229db88-1778-45a7-8367-755e0e4936e8"), "GBP", "826", "British Pound Sterling" },
+                    { new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"), "EUR", "978", "Euro" },
+                    { new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"), "USD", "840", "United States Dollar" },
+                    { new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), "UAH", "980", "Ukrainian Hryvnia" },
+                    { new Guid("923a0172-2022-40e7-bc3d-05b6aa0cd5cc"), "JPY", "392", "Japanese Yen" },
+                    { new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), "RUB", "643", "Russian Ruble" }
                 });
 
             migrationBuilder.InsertData(
@@ -170,8 +166,8 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "Id", "Title" },
                 values: new object[,]
                 {
-                    { new Guid("b1deb257-494e-44db-9767-8a9aee44cc55"), "Admin" },
-                    { new Guid("f0a5b9ba-08ec-4c37-ad09-601c3094a042"), "User" }
+                    { new Guid("1834f226-0d3e-4782-8bc6-45195c929baf"), "Admin" },
+                    { new Guid("e949b90f-172b-4478-bfba-b309341024f3"), "User" }
                 });
 
             migrationBuilder.InsertData(
@@ -179,8 +175,8 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "Id", "Email", "FullName", "PasswordHash" },
                 values: new object[,]
                 {
-                    { new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568"), "penis@gmail.com", "Mike Vazovskiy", "$2a$11$CJElh7xnoiJMrc62slsmZeYxNcfTJ83YohHQWx4.1hcAjsLmcDePu" },
-                    { new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e"), "popka@gmail.com", "John Doe", "$2a$11$qj0wZu3aGCy7NV7frR8q.utwvmPBVG91MJI5RbBTEoUerQbtVLJlO" }
+                    { new Guid("78272231-c67b-4cf0-ae43-557b152b35fd"), "popka@gmail.com", "John Doe", "$2a$11$N6v06ElDxQu2ehLHLQvxmeHTgBNzkgHX/vc0OAllW87BLDMbZXG3y" },
+                    { new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a"), "penis@gmail.com", "Mike Vazovskiy", "$2a$11$ppPf9PYy0HU/rlyBO14vgOi1Q2tBFcq9RIc73IXpS1/Sw7y2IxeKm" }
                 });
 
             migrationBuilder.InsertData(
@@ -188,18 +184,18 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "Id", "Balance", "CurrencyId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("0d65ddf5-ccd4-435e-9ff4-18757074e8f7"), 0m, new Guid("fe59caa8-249c-4db5-b700-f40e3acade15"), new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e") },
-                    { new Guid("215e66f0-4257-4961-a2c1-224d94bdc134"), 0m, new Guid("c9f2924e-523c-46b1-bdd1-404b3a972d41"), new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e") },
-                    { new Guid("42ebedae-12ec-4427-bf30-bdf05121d839"), 0m, new Guid("98d7a0df-d4af-4408-85e3-19ad0c74ed5b"), new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568") },
-                    { new Guid("483f4fa2-63a9-41b4-b482-e529bcc55ff4"), 0m, new Guid("99b68f3a-c560-4b60-ae7a-b500828197e8"), new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568") },
-                    { new Guid("60d407e1-b513-4822-aa8c-560f4c5ff62c"), 0m, new Guid("99b68f3a-c560-4b60-ae7a-b500828197e8"), new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e") },
-                    { new Guid("75c62c2c-025a-40e9-beb7-a7f42350fbb7"), 0m, new Guid("98d7a0df-d4af-4408-85e3-19ad0c74ed5b"), new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e") },
-                    { new Guid("929586c8-7f25-4583-b105-60b0713cbeb2"), 0m, new Guid("fe59caa8-249c-4db5-b700-f40e3acade15"), new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568") },
-                    { new Guid("b5868064-8697-493e-b3a0-89025c1137f4"), 0m, new Guid("18081637-6a28-4de3-a797-4eb340092044"), new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568") },
-                    { new Guid("d6a91e97-ae87-4f3d-8ff5-820dfe1ac513"), 0m, new Guid("18081637-6a28-4de3-a797-4eb340092044"), new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e") },
-                    { new Guid("ea9b2daa-8b28-4d03-b0ea-dbea16b2b9a6"), 0m, new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"), new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e") },
-                    { new Guid("ed5a4252-47b4-4848-bed7-4e8483d49f2d"), 0m, new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"), new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568") },
-                    { new Guid("fcff9f53-9ee1-400f-83bf-3a1f2a59361f"), 0m, new Guid("c9f2924e-523c-46b1-bdd1-404b3a972d41"), new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568") }
+                    { new Guid("29299afb-8591-4c6b-a10a-785f74ff56b8"), 0m, new Guid("0229db88-1778-45a7-8367-755e0e4936e8"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
+                    { new Guid("2ea873c9-6720-4010-83d7-09527ee0244d"), 0m, new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
+                    { new Guid("4721de23-e8a4-4780-9c77-dbf5138705d4"), 0m, new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
+                    { new Guid("5a9c29c5-e1ee-4e42-87c5-f1b3d7d77055"), 0m, new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
+                    { new Guid("a04ef95e-6fb0-4f41-a81a-f4e9cddff841"), 0m, new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
+                    { new Guid("a8cb3937-853f-4d01-9042-8e720c8fc8e1"), 0m, new Guid("923a0172-2022-40e7-bc3d-05b6aa0cd5cc"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
+                    { new Guid("acba0c34-e0aa-4c58-aadd-9ba1ee925669"), 0m, new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
+                    { new Guid("bec5fdbd-ca38-49a5-a0e9-c6071623dc5f"), 0m, new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
+                    { new Guid("caf09fd6-c04c-4b2f-9939-60b6c36b7160"), 0m, new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
+                    { new Guid("dca585a8-3e6c-41df-bb0a-470e3ce650e3"), 0m, new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
+                    { new Guid("e4730aa0-3b14-4b77-93f0-1f21fb4854ce"), 0m, new Guid("923a0172-2022-40e7-bc3d-05b6aa0cd5cc"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
+                    { new Guid("f5939608-cefe-490e-a6c6-3c9e78eb3645"), 0m, new Guid("0229db88-1778-45a7-8367-755e0e4936e8"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") }
                 });
 
             migrationBuilder.InsertData(
@@ -207,9 +203,9 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("b1deb257-494e-44db-9767-8a9aee44cc55"), new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568") },
-                    { new Guid("f0a5b9ba-08ec-4c37-ad09-601c3094a042"), new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568") },
-                    { new Guid("f0a5b9ba-08ec-4c37-ad09-601c3094a042"), new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e") }
+                    { new Guid("e949b90f-172b-4478-bfba-b309341024f3"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
+                    { new Guid("1834f226-0d3e-4782-8bc6-45195c929baf"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
+                    { new Guid("e949b90f-172b-4478-bfba-b309341024f3"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -241,11 +237,6 @@ namespace TestTask.DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MoneyOperations_CommissionId",
-                table: "MoneyOperations",
-                column: "CommissionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Roles_Title",
                 table: "Roles",
                 column: "Title",
@@ -267,6 +258,9 @@ namespace TestTask.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Commissions");
+
+            migrationBuilder.DropTable(
                 name: "MoneyAccounts");
 
             migrationBuilder.DropTable(
@@ -277,9 +271,6 @@ namespace TestTask.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Currencies");
-
-            migrationBuilder.DropTable(
-                name: "Commissions");
 
             migrationBuilder.DropTable(
                 name: "Roles");

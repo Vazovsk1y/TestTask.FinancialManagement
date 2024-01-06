@@ -44,37 +44,37 @@ namespace TestTask.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9baa1ddf-7294-431f-8701-6cbe66109a63"),
-                            CurrencyFromId = new Guid("18081637-6a28-4de3-a797-4eb340092044"),
-                            CurrencyToId = new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"),
+                            Id = new Guid("1e5ae49d-9d21-44e3-a35f-121d41c96f5c"),
+                            CurrencyFromId = new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"),
+                            CurrencyToId = new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"),
                             Value = 0.1m
                         },
                         new
                         {
-                            Id = new Guid("58290782-772c-4e3e-af67-1435299ccaae"),
-                            CurrencyFromId = new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"),
-                            CurrencyToId = new Guid("18081637-6a28-4de3-a797-4eb340092044"),
+                            Id = new Guid("29866c48-8153-4bb8-a438-010aee0a0f38"),
+                            CurrencyFromId = new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"),
+                            CurrencyToId = new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"),
                             Value = 0.21m
                         },
                         new
                         {
-                            Id = new Guid("90dddea6-03ba-4de6-bb34-c9c53d80cd35"),
-                            CurrencyFromId = new Guid("fe59caa8-249c-4db5-b700-f40e3acade15"),
-                            CurrencyToId = new Guid("18081637-6a28-4de3-a797-4eb340092044"),
+                            Id = new Guid("b3ff0421-30aa-4402-85e3-0d7c2ef618cc"),
+                            CurrencyFromId = new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"),
+                            CurrencyToId = new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"),
                             Value = 0.14m
                         },
                         new
                         {
-                            Id = new Guid("a22532ba-a850-425c-9ee8-19266e29bc26"),
-                            CurrencyFromId = new Guid("18081637-6a28-4de3-a797-4eb340092044"),
-                            CurrencyToId = new Guid("fe59caa8-249c-4db5-b700-f40e3acade15"),
+                            Id = new Guid("7dd318c2-b785-4ace-86fb-85cbfa3b7b4e"),
+                            CurrencyFromId = new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"),
+                            CurrencyToId = new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"),
                             Value = 0.08m
                         },
                         new
                         {
-                            Id = new Guid("076b3d84-c7cb-423d-81bd-788e44f676a4"),
-                            CurrencyFromId = new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"),
-                            CurrencyToId = new Guid("c9f2924e-523c-46b1-bdd1-404b3a972d41"),
+                            Id = new Guid("9d04d7e2-cd09-4b46-8234-4fcbc534eb7d"),
+                            CurrencyFromId = new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"),
+                            CurrencyToId = new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"),
                             Value = 0.15m
                         });
                 });
@@ -115,42 +115,42 @@ namespace TestTask.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fe59caa8-249c-4db5-b700-f40e3acade15"),
+                            Id = new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"),
                             AlphabeticCode = "USD",
                             NumericCode = "840",
                             Title = "United States Dollar"
                         },
                         new
                         {
-                            Id = new Guid("c9f2924e-523c-46b1-bdd1-404b3a972d41"),
+                            Id = new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"),
                             AlphabeticCode = "EUR",
                             NumericCode = "978",
                             Title = "Euro"
                         },
                         new
                         {
-                            Id = new Guid("18081637-6a28-4de3-a797-4eb340092044"),
+                            Id = new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"),
                             AlphabeticCode = "UAH",
                             NumericCode = "980",
                             Title = "Ukrainian Hryvnia"
                         },
                         new
                         {
-                            Id = new Guid("98d7a0df-d4af-4408-85e3-19ad0c74ed5b"),
+                            Id = new Guid("0229db88-1778-45a7-8367-755e0e4936e8"),
                             AlphabeticCode = "GBP",
                             NumericCode = "826",
                             Title = "British Pound Sterling"
                         },
                         new
                         {
-                            Id = new Guid("99b68f3a-c560-4b60-ae7a-b500828197e8"),
+                            Id = new Guid("923a0172-2022-40e7-bc3d-05b6aa0cd5cc"),
                             AlphabeticCode = "JPY",
                             NumericCode = "392",
                             Title = "Japanese Yen"
                         },
                         new
                         {
-                            Id = new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"),
+                            Id = new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"),
                             AlphabeticCode = "RUB",
                             NumericCode = "643",
                             Title = "Russian Ruble"
@@ -183,87 +183,87 @@ namespace TestTask.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("929586c8-7f25-4583-b105-60b0713cbeb2"),
+                            Id = new Guid("4721de23-e8a4-4780-9c77-dbf5138705d4"),
                             Balance = 0m,
-                            CurrencyId = new Guid("fe59caa8-249c-4db5-b700-f40e3acade15"),
-                            UserId = new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568")
+                            CurrencyId = new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"),
+                            UserId = new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a")
                         },
                         new
                         {
-                            Id = new Guid("0d65ddf5-ccd4-435e-9ff4-18757074e8f7"),
+                            Id = new Guid("caf09fd6-c04c-4b2f-9939-60b6c36b7160"),
                             Balance = 0m,
-                            CurrencyId = new Guid("fe59caa8-249c-4db5-b700-f40e3acade15"),
-                            UserId = new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e")
+                            CurrencyId = new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"),
+                            UserId = new Guid("78272231-c67b-4cf0-ae43-557b152b35fd")
                         },
                         new
                         {
-                            Id = new Guid("fcff9f53-9ee1-400f-83bf-3a1f2a59361f"),
+                            Id = new Guid("2ea873c9-6720-4010-83d7-09527ee0244d"),
                             Balance = 0m,
-                            CurrencyId = new Guid("c9f2924e-523c-46b1-bdd1-404b3a972d41"),
-                            UserId = new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568")
+                            CurrencyId = new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"),
+                            UserId = new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a")
                         },
                         new
                         {
-                            Id = new Guid("215e66f0-4257-4961-a2c1-224d94bdc134"),
+                            Id = new Guid("dca585a8-3e6c-41df-bb0a-470e3ce650e3"),
                             Balance = 0m,
-                            CurrencyId = new Guid("c9f2924e-523c-46b1-bdd1-404b3a972d41"),
-                            UserId = new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e")
+                            CurrencyId = new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"),
+                            UserId = new Guid("78272231-c67b-4cf0-ae43-557b152b35fd")
                         },
                         new
                         {
-                            Id = new Guid("b5868064-8697-493e-b3a0-89025c1137f4"),
+                            Id = new Guid("5a9c29c5-e1ee-4e42-87c5-f1b3d7d77055"),
                             Balance = 0m,
-                            CurrencyId = new Guid("18081637-6a28-4de3-a797-4eb340092044"),
-                            UserId = new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568")
+                            CurrencyId = new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"),
+                            UserId = new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a")
                         },
                         new
                         {
-                            Id = new Guid("d6a91e97-ae87-4f3d-8ff5-820dfe1ac513"),
+                            Id = new Guid("a04ef95e-6fb0-4f41-a81a-f4e9cddff841"),
                             Balance = 0m,
-                            CurrencyId = new Guid("18081637-6a28-4de3-a797-4eb340092044"),
-                            UserId = new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e")
+                            CurrencyId = new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"),
+                            UserId = new Guid("78272231-c67b-4cf0-ae43-557b152b35fd")
                         },
                         new
                         {
-                            Id = new Guid("42ebedae-12ec-4427-bf30-bdf05121d839"),
+                            Id = new Guid("29299afb-8591-4c6b-a10a-785f74ff56b8"),
                             Balance = 0m,
-                            CurrencyId = new Guid("98d7a0df-d4af-4408-85e3-19ad0c74ed5b"),
-                            UserId = new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568")
+                            CurrencyId = new Guid("0229db88-1778-45a7-8367-755e0e4936e8"),
+                            UserId = new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a")
                         },
                         new
                         {
-                            Id = new Guid("75c62c2c-025a-40e9-beb7-a7f42350fbb7"),
+                            Id = new Guid("f5939608-cefe-490e-a6c6-3c9e78eb3645"),
                             Balance = 0m,
-                            CurrencyId = new Guid("98d7a0df-d4af-4408-85e3-19ad0c74ed5b"),
-                            UserId = new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e")
+                            CurrencyId = new Guid("0229db88-1778-45a7-8367-755e0e4936e8"),
+                            UserId = new Guid("78272231-c67b-4cf0-ae43-557b152b35fd")
                         },
                         new
                         {
-                            Id = new Guid("483f4fa2-63a9-41b4-b482-e529bcc55ff4"),
+                            Id = new Guid("e4730aa0-3b14-4b77-93f0-1f21fb4854ce"),
                             Balance = 0m,
-                            CurrencyId = new Guid("99b68f3a-c560-4b60-ae7a-b500828197e8"),
-                            UserId = new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568")
+                            CurrencyId = new Guid("923a0172-2022-40e7-bc3d-05b6aa0cd5cc"),
+                            UserId = new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a")
                         },
                         new
                         {
-                            Id = new Guid("60d407e1-b513-4822-aa8c-560f4c5ff62c"),
+                            Id = new Guid("a8cb3937-853f-4d01-9042-8e720c8fc8e1"),
                             Balance = 0m,
-                            CurrencyId = new Guid("99b68f3a-c560-4b60-ae7a-b500828197e8"),
-                            UserId = new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e")
+                            CurrencyId = new Guid("923a0172-2022-40e7-bc3d-05b6aa0cd5cc"),
+                            UserId = new Guid("78272231-c67b-4cf0-ae43-557b152b35fd")
                         },
                         new
                         {
-                            Id = new Guid("ed5a4252-47b4-4848-bed7-4e8483d49f2d"),
+                            Id = new Guid("bec5fdbd-ca38-49a5-a0e9-c6071623dc5f"),
                             Balance = 0m,
-                            CurrencyId = new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"),
-                            UserId = new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568")
+                            CurrencyId = new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"),
+                            UserId = new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a")
                         },
                         new
                         {
-                            Id = new Guid("ea9b2daa-8b28-4d03-b0ea-dbea16b2b9a6"),
+                            Id = new Guid("acba0c34-e0aa-4c58-aadd-9ba1ee925669"),
                             Balance = 0m,
-                            CurrencyId = new Guid("e56277ad-bb5a-4fc8-b4ab-7b6cb56a4e6f"),
-                            UserId = new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e")
+                            CurrencyId = new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"),
+                            UserId = new Guid("78272231-c67b-4cf0-ae43-557b152b35fd")
                         });
                 });
 
@@ -272,8 +272,13 @@ namespace TestTask.DAL.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CommissionId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<decimal>("AppliedCommissionValue")
+                        .HasPrecision(4, 4)
+                        .HasColumnType("decimal(4,4)");
+
+                    b.Property<decimal>("AppliedExchangeRate")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("decimal(19,4)");
 
                     b.Property<Guid?>("MoneyAccountFromId")
                         .HasColumnType("uniqueidentifier");
@@ -298,8 +303,6 @@ namespace TestTask.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommissionId");
-
                     b.ToTable("MoneyOperations");
                 });
 
@@ -323,12 +326,12 @@ namespace TestTask.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f0a5b9ba-08ec-4c37-ad09-601c3094a042"),
+                            Id = new Guid("e949b90f-172b-4478-bfba-b309341024f3"),
                             Title = "User"
                         },
                         new
                         {
-                            Id = new Guid("b1deb257-494e-44db-9767-8a9aee44cc55"),
+                            Id = new Guid("1834f226-0d3e-4782-8bc6-45195c929baf"),
                             Title = "Admin"
                         });
                 });
@@ -362,17 +365,17 @@ namespace TestTask.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568"),
+                            Id = new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a"),
                             Email = "penis@gmail.com",
                             FullName = "Mike Vazovskiy",
-                            PasswordHash = "$2a$11$CJElh7xnoiJMrc62slsmZeYxNcfTJ83YohHQWx4.1hcAjsLmcDePu"
+                            PasswordHash = "$2a$11$ppPf9PYy0HU/rlyBO14vgOi1Q2tBFcq9RIc73IXpS1/Sw7y2IxeKm"
                         },
                         new
                         {
-                            Id = new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e"),
+                            Id = new Guid("78272231-c67b-4cf0-ae43-557b152b35fd"),
                             Email = "popka@gmail.com",
                             FullName = "John Doe",
-                            PasswordHash = "$2a$11$qj0wZu3aGCy7NV7frR8q.utwvmPBVG91MJI5RbBTEoUerQbtVLJlO"
+                            PasswordHash = "$2a$11$N6v06ElDxQu2ehLHLQvxmeHTgBNzkgHX/vc0OAllW87BLDMbZXG3y"
                         });
                 });
 
@@ -393,18 +396,18 @@ namespace TestTask.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568"),
-                            RoleId = new Guid("f0a5b9ba-08ec-4c37-ad09-601c3094a042")
+                            UserId = new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a"),
+                            RoleId = new Guid("e949b90f-172b-4478-bfba-b309341024f3")
                         },
                         new
                         {
-                            UserId = new Guid("32810ebd-20d1-49d3-8846-e4760bf8a568"),
-                            RoleId = new Guid("b1deb257-494e-44db-9767-8a9aee44cc55")
+                            UserId = new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a"),
+                            RoleId = new Guid("1834f226-0d3e-4782-8bc6-45195c929baf")
                         },
                         new
                         {
-                            UserId = new Guid("ec38f2a7-5b5f-4422-8d61-0fd21a0c860e"),
-                            RoleId = new Guid("f0a5b9ba-08ec-4c37-ad09-601c3094a042")
+                            UserId = new Guid("78272231-c67b-4cf0-ae43-557b152b35fd"),
+                            RoleId = new Guid("e949b90f-172b-4478-bfba-b309341024f3")
                         });
                 });
 
@@ -425,15 +428,6 @@ namespace TestTask.DAL.Migrations
                     b.Navigation("Currency");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TestTask.Domain.Entities.MoneyOperation", b =>
-                {
-                    b.HasOne("TestTask.Domain.Entities.Commission", "Commission")
-                        .WithMany()
-                        .HasForeignKey("CommissionId");
-
-                    b.Navigation("Commission");
                 });
 
             modelBuilder.Entity("TestTask.Domain.Entities.UserRole", b =>

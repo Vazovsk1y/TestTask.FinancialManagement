@@ -4,6 +4,7 @@ using TestTask.Application.Common;
 using TestTask.Application.Contracts;
 using TestTask.Application.Services;
 using TestTask.DAL;
+using TestTask.Domain.Constants;
 using TestTask.Domain.Entities;
 using TestTask.Domain.Enums;
 
@@ -19,42 +20,75 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 
 	public async Task<Result<MoneyOperationId>> EnrollAsync(EnrollDTO enrollDTO, CancellationToken cancellationToken = default)
 	{
-		var validationResult = Validate(enrollDTO);
-		if (validationResult.IsFailure)
+		throw new NotImplementedException();
+		//var validationResult = Validate(enrollDTO);
+		//if (validationResult.IsFailure)
+		//{
+		//	return Result.Failure<MoneyOperationId>(validationResult.ErrorMessage);
+		//}
+
+		//var account = await _dbContext
+		//	.MoneyAccounts
+		//	.SingleOrDefaultAsync(e => e.Id == enrollDTO.MoneyAccountToId, cancellationToken);
+
+		//if (account is null)
+		//{
+		//	return Result.Failure<MoneyOperationId>(Errors.EntityWithPassedIdIsNotExists(nameof(MoneyAccount)));
+		//}
+
+		//account.Balance += enrollDTO.MoneyAmount;
+		//var operation = new MoneyOperation
+		//{
+		//	MoneyAmount = enrollDTO.MoneyAmount,
+		//	MoneyAccountToId = account.Id,
+		//	MoveType = MoneyMoveTypes.Adding,
+		//	OperationDate = _clock.GetUtcNow(),
+		//	OperationType = MoneyOperationTypes.Enrolment,
+		//};
+
+		//_dbContext.MoneyOperations.Add(operation);
+		//await _dbContext.SaveChangesAsync(cancellationToken);
+		//return operation.Id;
+	}
+
+	public async Task<Result<IReadOnlyCollection<MoneyOperationDTO>>> GetAllByUserIdAsync(UserId userId, CancellationToken cancellationToken = default)
+	{
+		var requesterIdResult = _userProvider.GetCurrent();
+		if (requesterIdResult.IsFailure)
 		{
-			return Result.Failure<MoneyOperationId>(validationResult.ErrorMessage);
+			return Result.Failure<IReadOnlyCollection<MoneyOperationDTO>>(requesterIdResult.ErrorMessage);
 		}
 
-		var account = await _dbContext
+		var requester = await _dbContext
+			.Users
+			.Include(e => e.Roles)
+			.ThenInclude(e => e.Role)
+			.GetById(requesterIdResult.Value);
+
+		bool actionPermitted = requester!.IsInRole(DefaultRoles.Admin) || requester!.Id == userId;
+		if (!actionPermitted)
+		{
+			return Result.Failure<IReadOnlyCollection<MoneyOperationDTO>>(Errors.Auth.AccessDenied);
+		}
+
+		var accounts =  _dbContext
 			.MoneyAccounts
-			.SingleOrDefaultAsync(e => e.Id == enrollDTO.MoneyAccountToId, cancellationToken);
+			.AsNoTracking()
+			.Where(e => e.UserId == userId)
+			.Select(e => e.Id);
 
-		if (account is null)
-		{
-			return Result.Failure<MoneyOperationId>(Errors.EntityWithPassedIdIsNotExists(nameof(MoneyAccount)));
-		}
+		var result = await _dbContext
+			.MoneyOperations
+			.AsNoTracking()
+			.Where(e => accounts.Contains(e.MoneyAccountFromId) || accounts.Contains(e.MoneyAccountToId))
+			.Select(e => e.ToDTO())
+			.ToListAsync(cancellationToken);
 
-		account.Balance += enrollDTO.MoneyAmount;
-		var operation = new MoneyOperation
-		{
-			MoneyAmount = enrollDTO.MoneyAmount,
-			MoneyAccountToId = account.Id,
-			MoveType = MoneyMoveTypes.Adding,
-			OperationDate = _clock.GetUtcNow(),
-			OperationType = MoneyOperationTypes.Enrolment,
-		};
 
-		_dbContext.MoneyOperations.Add(operation);
-		await _dbContext.SaveChangesAsync(cancellationToken);
-		return operation.Id;
+		return result;
 	}
 
 	public Task<Result<IReadOnlyCollection<MoneyOperationDTO>>> GetAllByMoneyAccountIdAsync(UserId requesterId, MoneyAccountId moneyAccountId, CancellationToken cancellationToken = default)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<Result<IReadOnlyCollection<MoneyOperationDTO>>> GetAllByUserIdAsync(UserId requesterId, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
@@ -68,4 +102,13 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 	{
 		throw new NotImplementedException();
 	}
+
+	//private static Result<decimal> CalculateFinalSum(decimal startAmount, decimal commission, decimal exchangeRate)
+	//{
+	//	decimal result = 0m;
+	//	if (exchangeRate != 0m)
+	//	{
+
+	//	}
+	//}
 }
