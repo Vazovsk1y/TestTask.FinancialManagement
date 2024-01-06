@@ -2,4 +2,4 @@
 
 namespace TestTask.Application.Contracts;
 
-public record MoneyAccountDTO(MoneyAccountId Id, CurrencyDTO Currency, decimal Balance);
+public record MoneyAccountDTO(MoneyAccountId Id, UserId UserId, CurrencyDTO Currency, decimal Balance);

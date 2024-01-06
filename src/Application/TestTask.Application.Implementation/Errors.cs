@@ -9,6 +9,10 @@ public static class Errors
 	public static class Auth
 	{
 		public const string InvalidCredentials = "Email or password was incorrect.";
+
+		public const string AccessDenied = "Access to this action denied.";
+
+		public const string Unauthenticated = "User was unauthenticated.";
 	}
 
 	public static class MoneyAccount

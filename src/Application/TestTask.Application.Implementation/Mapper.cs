@@ -7,7 +7,7 @@ public static class Mapper
 {
 	public static MoneyAccountDTO ToDTO(this MoneyAccount moneyAccount)
 	{
-		return new MoneyAccountDTO(moneyAccount.Id, moneyAccount.Currency!.ToDTO(), moneyAccount.Balance);
+		return new MoneyAccountDTO(moneyAccount.Id, moneyAccount.UserId, moneyAccount.Currency!.ToDTO(), moneyAccount.Balance);
 	}
 
 	public static CurrencyDTO ToDTO(this Currency currency)

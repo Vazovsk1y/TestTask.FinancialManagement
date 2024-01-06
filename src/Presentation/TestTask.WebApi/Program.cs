@@ -16,6 +16,7 @@ builder.Services.AddExceptionHandler<ExceptionsHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.AddSwaggerWithJwt();
 builder.Services.AddAuthenticationWithJwtBearer(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddValidatorsFromAssembly(typeof(UserCredentialsModelValidator).Assembly);
 builder.Services.AddFluentValidationAutoValidation();

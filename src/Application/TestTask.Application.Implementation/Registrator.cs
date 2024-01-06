@@ -15,6 +15,7 @@ public static class Registrator
 		.AddScoped<ICurrencyService, CurrencyService>()
 		.AddScoped<ICommissionService, CommissionService>()
 		.AddScoped<ITokenProvider, JwtTokenProvider>()
+		.AddScoped<IUserProvider, HttpContextUserProvider>()
 		.AddValidatorsFromAssembly(typeof(UserCredentialsDTOValidator).Assembly)
 		;
 }
