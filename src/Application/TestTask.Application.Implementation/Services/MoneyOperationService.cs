@@ -214,7 +214,11 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 			return Result.Failure<MoneyOperation>(Errors.EntityWithPassedIdIsNotExists(nameof(Currency)));
 		}
 
-		decimal commission = _dbContext.Commissions.SingleOrDefault(e => e.CurrencyFromId == enrollDTO.CurrencyFromId && e.CurrencyToId == to.CurrencyId)?.Value ?? Commission.DefaultValue;
+		decimal commission = enrollDTO.CurrencyFromId == to.CurrencyId ?
+			decimal.Zero
+			:
+			_dbContext.Commissions.SingleOrDefault(e => e.CurrencyFromId == enrollDTO.CurrencyFromId && e.CurrencyToId == to.CurrencyId)?.Value ?? Commission.DefaultValue;
+
 		decimal exchangeRate = enrollDTO.CurrencyFromId == to.CurrencyId ? decimal.Zero : _exchangeRateProvider.GetRate(enrollDTO.CurrencyFromId, to.CurrencyId).Value;
 
 		var finalAmountResult = CalculateFinalSum(enrollDTO.MoneyAmount, commission, exchangeRate, false);

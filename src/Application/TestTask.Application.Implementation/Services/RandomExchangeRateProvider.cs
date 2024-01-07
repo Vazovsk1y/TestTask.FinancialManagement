@@ -11,7 +11,7 @@ public class RandomExchangeRateProvider : IExchangeRateProvider
 		// TODO
 		// Implement receiving rate value from another external api.
 
-		decimal randomValue = (decimal)(Random.Shared.NextDouble() * (10.0 - 0.1) + 0.1);
-		return randomValue;
+		double randomValue = (Random.Shared.NextDouble() * (10.0 - 0.1) + 0.1);
+		return (decimal)Math.Round(randomValue, 4);
 	}
 }
