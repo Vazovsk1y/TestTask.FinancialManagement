@@ -46,6 +46,30 @@ internal class CommissionService : BaseService, ICommissionService
 		return commission.Id;
 	}
 
+	public async Task<Result<IReadOnlyCollection<CommissionDTO>>> GetAllAsync(CancellationToken cancellationToken = default)
+	{
+		var currencies = await _dbContext
+			.Currencies
+			.Where(e => _dbContext.Commissions.Any(c => c.CurrencyFromId == e.Id || c.CurrencyToId == e.Id))
+			.ToListAsync(cancellationToken);
+
+		var commissions = await _dbContext
+			.Commissions
+			.ToListAsync(cancellationToken);
+
+		var dtos = commissions.Select(e =>
+		new CommissionDTO
+		(
+		e.Id,
+		currencies.Single(c => c.Id == e.CurrencyFromId).AlphabeticCode,
+		currencies.Single(i => i.Id == e.CurrencyToId).AlphabeticCode,
+		e.Value)
+		)
+		.ToList();
+
+		return dtos;
+	}
+
 	private async Task<Result<Commission>> CreateCommission(CommissionAddDTO commissionAddDTO)
 	{
 		var validationResult = Validate(commissionAddDTO);

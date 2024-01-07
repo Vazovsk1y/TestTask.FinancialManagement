@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TestTask.Application.Services;
 using TestTask.Domain.Constants;
 using TestTask.WebApi.Common;
@@ -15,6 +16,14 @@ public class CommissionsController(ICommissionService commissionService) : Autho
 	{
 		var dto = commissionAddModel.ToDTO();
 		var result = await commissionService.AddAsync(dto, cancellationToken);
+		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
+	}
+
+	[HttpGet]
+	[AllowAnonymous]
+	public async Task<IActionResult> GetAllCommissions(CancellationToken cancellationToken)
+	{
+		var result = await commissionService.GetAllAsync(cancellationToken);
 		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
 	}
 }

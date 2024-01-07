@@ -141,11 +141,11 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "Id", "CurrencyFromId", "CurrencyToId", "Value" },
                 values: new object[,]
                 {
-                    { new Guid("1e5ae49d-9d21-44e3-a35f-121d41c96f5c"), new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), 0.1m },
-                    { new Guid("29866c48-8153-4bb8-a438-010aee0a0f38"), new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), 0.21m },
-                    { new Guid("7dd318c2-b785-4ace-86fb-85cbfa3b7b4e"), new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"), 0.08m },
-                    { new Guid("9d04d7e2-cd09-4b46-8234-4fcbc534eb7d"), new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"), 0.15m },
-                    { new Guid("b3ff0421-30aa-4402-85e3-0d7c2ef618cc"), new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"), new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), 0.14m }
+                    { new Guid("3849c2af-ee6e-41b2-a099-c8e5bf25d10a"), new Guid("399cdcff-124c-4a25-bcec-57ce228313cf"), new Guid("493fe233-6f2e-4254-8329-6f552a5d5afa"), 0.14m },
+                    { new Guid("5ae2e435-60d4-4d50-9726-16ce7bc81421"), new Guid("493fe233-6f2e-4254-8329-6f552a5d5afa"), new Guid("fc2b4267-b924-464f-83d0-60a139438f84"), 0.1m },
+                    { new Guid("72b457a7-a6ce-4db5-b73e-6b16b7f756dd"), new Guid("fc2b4267-b924-464f-83d0-60a139438f84"), new Guid("a5b7f1c0-dda9-46fe-b8ee-772fcb03c958"), 0.15m },
+                    { new Guid("b9e6d347-afd5-4f32-83e3-13331b5157c8"), new Guid("fc2b4267-b924-464f-83d0-60a139438f84"), new Guid("493fe233-6f2e-4254-8329-6f552a5d5afa"), 0.21m },
+                    { new Guid("e04dde74-2a0a-4568-806f-5d60333ff2a1"), new Guid("493fe233-6f2e-4254-8329-6f552a5d5afa"), new Guid("399cdcff-124c-4a25-bcec-57ce228313cf"), 0.08m }
                 });
 
             migrationBuilder.InsertData(
@@ -153,12 +153,12 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "Id", "AlphabeticCode", "NumericCode", "Title" },
                 values: new object[,]
                 {
-                    { new Guid("0229db88-1778-45a7-8367-755e0e4936e8"), "GBP", "826", "British Pound Sterling" },
-                    { new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"), "EUR", "978", "Euro" },
-                    { new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"), "USD", "840", "United States Dollar" },
-                    { new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), "UAH", "980", "Ukrainian Hryvnia" },
-                    { new Guid("923a0172-2022-40e7-bc3d-05b6aa0cd5cc"), "JPY", "392", "Japanese Yen" },
-                    { new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), "RUB", "643", "Russian Ruble" }
+                    { new Guid("399cdcff-124c-4a25-bcec-57ce228313cf"), "USD", "840", "United States Dollar" },
+                    { new Guid("493fe233-6f2e-4254-8329-6f552a5d5afa"), "UAH", "980", "Ukrainian Hryvnia" },
+                    { new Guid("7ea95efd-0b61-4288-b618-b576af4c9fcd"), "JPY", "392", "Japanese Yen" },
+                    { new Guid("a5b7f1c0-dda9-46fe-b8ee-772fcb03c958"), "EUR", "978", "Euro" },
+                    { new Guid("d77e172a-6405-4468-878f-a9957a8d71a6"), "GBP", "826", "British Pound Sterling" },
+                    { new Guid("fc2b4267-b924-464f-83d0-60a139438f84"), "RUB", "643", "Russian Ruble" }
                 });
 
             migrationBuilder.InsertData(
@@ -166,8 +166,8 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "Id", "Title" },
                 values: new object[,]
                 {
-                    { new Guid("1834f226-0d3e-4782-8bc6-45195c929baf"), "Admin" },
-                    { new Guid("e949b90f-172b-4478-bfba-b309341024f3"), "User" }
+                    { new Guid("0991d748-59a9-4749-9a3b-41075b73de74"), "User" },
+                    { new Guid("83742101-eaef-4efb-b488-1288320ac083"), "Admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -175,8 +175,8 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "Id", "Email", "FullName", "PasswordHash" },
                 values: new object[,]
                 {
-                    { new Guid("78272231-c67b-4cf0-ae43-557b152b35fd"), "popka@gmail.com", "John Doe", "$2a$11$N6v06ElDxQu2ehLHLQvxmeHTgBNzkgHX/vc0OAllW87BLDMbZXG3y" },
-                    { new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a"), "penis@gmail.com", "Mike Vazovskiy", "$2a$11$ppPf9PYy0HU/rlyBO14vgOi1Q2tBFcq9RIc73IXpS1/Sw7y2IxeKm" }
+                    { new Guid("1f07aed5-aabf-4bf1-9361-4b13d22f8736"), "penis@gmail.com", "Mike Vazovskiy", "$2a$11$ISB8FqPJVNnu8oNVV9n5T.HkKOSb6HlG8lyvPBpp05oSivnLprKN2" },
+                    { new Guid("4583d3c6-ec37-475f-881d-af4e8836f056"), "popka@gmail.com", "John Doe", "$2a$11$nc5WXaDZ9M7klakIa3ngnO1CtEnQbyJ2GTsrPD7ABfCKnqM/JWjPq" }
                 });
 
             migrationBuilder.InsertData(
@@ -184,18 +184,18 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "Id", "Balance", "CurrencyId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("29299afb-8591-4c6b-a10a-785f74ff56b8"), 0m, new Guid("0229db88-1778-45a7-8367-755e0e4936e8"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
-                    { new Guid("2ea873c9-6720-4010-83d7-09527ee0244d"), 0m, new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
-                    { new Guid("4721de23-e8a4-4780-9c77-dbf5138705d4"), 0m, new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
-                    { new Guid("5a9c29c5-e1ee-4e42-87c5-f1b3d7d77055"), 0m, new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
-                    { new Guid("a04ef95e-6fb0-4f41-a81a-f4e9cddff841"), 0m, new Guid("91ee387d-153f-4614-a02a-5321d0f69bb1"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
-                    { new Guid("a8cb3937-853f-4d01-9042-8e720c8fc8e1"), 0m, new Guid("923a0172-2022-40e7-bc3d-05b6aa0cd5cc"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
-                    { new Guid("acba0c34-e0aa-4c58-aadd-9ba1ee925669"), 0m, new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
-                    { new Guid("bec5fdbd-ca38-49a5-a0e9-c6071623dc5f"), 0m, new Guid("95d3abcd-05a9-48fe-9f28-ab0fe379387b"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
-                    { new Guid("caf09fd6-c04c-4b2f-9939-60b6c36b7160"), 0m, new Guid("78f83ec9-90ab-4ce0-a3d6-196372aa72a9"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
-                    { new Guid("dca585a8-3e6c-41df-bb0a-470e3ce650e3"), 0m, new Guid("560e3524-1693-4fba-ade8-370da5b9a02b"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
-                    { new Guid("e4730aa0-3b14-4b77-93f0-1f21fb4854ce"), 0m, new Guid("923a0172-2022-40e7-bc3d-05b6aa0cd5cc"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
-                    { new Guid("f5939608-cefe-490e-a6c6-3c9e78eb3645"), 0m, new Guid("0229db88-1778-45a7-8367-755e0e4936e8"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") }
+                    { new Guid("038fda73-ea1e-46a2-92f5-661131dc8633"), 0m, new Guid("d77e172a-6405-4468-878f-a9957a8d71a6"), new Guid("1f07aed5-aabf-4bf1-9361-4b13d22f8736") },
+                    { new Guid("3765d195-bd79-47da-82bf-9ae1f2b1b36d"), 0m, new Guid("a5b7f1c0-dda9-46fe-b8ee-772fcb03c958"), new Guid("1f07aed5-aabf-4bf1-9361-4b13d22f8736") },
+                    { new Guid("381d6dfa-b38a-4843-8d23-a66be218fcbe"), 0m, new Guid("7ea95efd-0b61-4288-b618-b576af4c9fcd"), new Guid("4583d3c6-ec37-475f-881d-af4e8836f056") },
+                    { new Guid("5f1175ab-962d-43ad-9c8d-de00f7ddfa95"), 0m, new Guid("d77e172a-6405-4468-878f-a9957a8d71a6"), new Guid("4583d3c6-ec37-475f-881d-af4e8836f056") },
+                    { new Guid("6733d192-e8b0-4c15-a731-f7251adad67a"), 0m, new Guid("399cdcff-124c-4a25-bcec-57ce228313cf"), new Guid("1f07aed5-aabf-4bf1-9361-4b13d22f8736") },
+                    { new Guid("7a18c0ec-2084-436b-872d-229de74d5f11"), 0m, new Guid("a5b7f1c0-dda9-46fe-b8ee-772fcb03c958"), new Guid("4583d3c6-ec37-475f-881d-af4e8836f056") },
+                    { new Guid("8e2b2013-2662-445c-9c43-7442aa36120b"), 0m, new Guid("493fe233-6f2e-4254-8329-6f552a5d5afa"), new Guid("1f07aed5-aabf-4bf1-9361-4b13d22f8736") },
+                    { new Guid("992974d5-3de6-4326-901b-3aee87b003a1"), 0m, new Guid("fc2b4267-b924-464f-83d0-60a139438f84"), new Guid("4583d3c6-ec37-475f-881d-af4e8836f056") },
+                    { new Guid("a47e0d4a-7da7-4ed4-bf25-c1e1bf0d2b0b"), 0m, new Guid("493fe233-6f2e-4254-8329-6f552a5d5afa"), new Guid("4583d3c6-ec37-475f-881d-af4e8836f056") },
+                    { new Guid("ba209627-3a7e-4397-b9ed-9b254c3c4e98"), 0m, new Guid("7ea95efd-0b61-4288-b618-b576af4c9fcd"), new Guid("1f07aed5-aabf-4bf1-9361-4b13d22f8736") },
+                    { new Guid("c57a479f-eb03-4764-8606-6c2697df3051"), 0m, new Guid("fc2b4267-b924-464f-83d0-60a139438f84"), new Guid("1f07aed5-aabf-4bf1-9361-4b13d22f8736") },
+                    { new Guid("c7481c2a-e3a0-4713-8ad1-ec9e0a4793dc"), 0m, new Guid("399cdcff-124c-4a25-bcec-57ce228313cf"), new Guid("4583d3c6-ec37-475f-881d-af4e8836f056") }
                 });
 
             migrationBuilder.InsertData(
@@ -203,9 +203,9 @@ namespace TestTask.DAL.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("e949b90f-172b-4478-bfba-b309341024f3"), new Guid("78272231-c67b-4cf0-ae43-557b152b35fd") },
-                    { new Guid("1834f226-0d3e-4782-8bc6-45195c929baf"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") },
-                    { new Guid("e949b90f-172b-4478-bfba-b309341024f3"), new Guid("ecfe7076-acba-4d23-8cdb-2d954afb450a") }
+                    { new Guid("0991d748-59a9-4749-9a3b-41075b73de74"), new Guid("1f07aed5-aabf-4bf1-9361-4b13d22f8736") },
+                    { new Guid("83742101-eaef-4efb-b488-1288320ac083"), new Guid("1f07aed5-aabf-4bf1-9361-4b13d22f8736") },
+                    { new Guid("0991d748-59a9-4749-9a3b-41075b73de74"), new Guid("4583d3c6-ec37-475f-881d-af4e8836f056") }
                 });
 
             migrationBuilder.CreateIndex(
