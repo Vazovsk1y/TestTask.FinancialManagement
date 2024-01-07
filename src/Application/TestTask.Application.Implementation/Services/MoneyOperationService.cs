@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using TestTask.Application.Common;
 using TestTask.Application.Contracts;
 using TestTask.Application.Services;
@@ -57,6 +56,42 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 		return enrollment.Id;
 	}
 
+	public async Task<Result<MoneyOperationId>> WithdrawalAsync(WithdrawalDTO withdrawalDTO, CancellationToken cancellationToken = default)
+	{
+		var requesterIdResult = _userProvider.GetCurrent();
+		if (requesterIdResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperationId>(requesterIdResult.ErrorMessage);
+		}
+
+		var account = await _dbContext
+			.MoneyAccounts
+			.SingleOrDefaultAsync(e => e.Id == withdrawalDTO.MoneyAccountFromId, cancellationToken);
+
+		if (account is null)
+		{
+			return Result.Failure<MoneyOperationId>(Errors.EntityWithPassedIdIsNotExists(nameof(MoneyAccount)));
+		}
+
+		if (account.UserId != requesterIdResult.Value)
+		{
+			return Result.Failure<MoneyOperationId>(Errors.Auth.AccessDenied);
+		}
+
+		var withdrawalCreationResult = CreateWithdrawal(withdrawalDTO, account);
+		if (withdrawalCreationResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperationId>(withdrawalCreationResult.ErrorMessage);
+		}
+
+		var withdrawal = withdrawalCreationResult.Value;
+		account.Balance -= withdrawal.MoneyAmount;
+
+		_dbContext.MoneyOperations.Add(withdrawal);
+		await _dbContext.SaveChangesAsync(cancellationToken);
+		return withdrawal.Id;
+	}
+
 	public async Task<Result<IReadOnlyCollection<MoneyOperationDTO>>> GetAllByUserIdAsync(UserId userId, CancellationToken cancellationToken = default)
 	{
 		var requesterIdResult = _userProvider.GetCurrent();
@@ -104,11 +139,6 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 		throw new NotImplementedException();
 	}
 
-	public Task<Result<MoneyOperationId>> WithdrawalAsync(UserId requesterId, WithdrawalDTO withdrawalDTO, CancellationToken cancellationToken = default)
-	{
-		throw new NotImplementedException();
-	}
-
 	private async Task<Result<MoneyOperation>> CreateEnrollment(EnrollDTO enrollDTO, MoneyAccount moneyAccountTo)
 	{
 		var validationResult = Validate(enrollDTO);
@@ -142,6 +172,31 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 			MoneyAccountToId = enrollDTO.MoneyAccountToId,
 			MoveType = MoneyMoveTypes.Adding,
 			OperationType = MoneyOperationTypes.Enrolment
+		};
+	}
+
+	private Result<MoneyOperation> CreateWithdrawal(WithdrawalDTO withdrawalDTO, MoneyAccount account)
+	{
+		var validationResult = Validate(withdrawalDTO);
+		if (validationResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperation>(validationResult.ErrorMessage);
+		}
+
+		if (account.Balance < withdrawalDTO.MoneyAmount)
+		{
+			return Result.Failure<MoneyOperation>("Not enough money on balance.");
+		}
+
+		return new MoneyOperation
+		{
+			MoneyAccountFromId = withdrawalDTO.MoneyAccountFromId,
+			MoneyAmount = withdrawalDTO.MoneyAmount,
+			OperationDate = _clock.GetUtcNow(),
+			AppliedCommissionValue = decimal.Zero,
+			AppliedExchangeRate = decimal.Zero,
+			MoveType = MoneyMoveTypes.Substracting,
+			OperationType = MoneyOperationTypes.Withdrawal,
 		};
 	}
 

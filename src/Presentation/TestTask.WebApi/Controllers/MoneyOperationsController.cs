@@ -15,4 +15,12 @@ public class MoneyOperationsController(IMoneyOperationService moneyOperationServ
 		var result = await moneyOperationService.EnrollAsync(dto, cancellationToken);
 		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
 	}
+
+	[HttpPost("withdrawal")]
+	public async Task<IActionResult> WithdrawalMoneyAccount(WithdrawalModel withdrawalModel, CancellationToken cancellationToken)
+	{
+		var dto = withdrawalModel.ToDTO();
+		var result = await moneyOperationService.WithdrawalAsync(dto, cancellationToken);
+		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
+	}
 }

@@ -30,4 +30,9 @@ public static class Mapper
 	{
 		return new CommissionAddDTO(new CurrencyId(model.CurrencyFromId), new CurrencyId(model.CurrencyToId), model.Value);
 	}
+
+	public static WithdrawalDTO ToDTO(this WithdrawalModel model)
+	{
+		return new WithdrawalDTO(new MoneyAccountId(model.MoneyAccountFromId), model.MoneyAmount);
+	}
 }
