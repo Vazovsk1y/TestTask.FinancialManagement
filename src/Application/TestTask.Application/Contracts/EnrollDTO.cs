@@ -2,4 +2,4 @@
 
 namespace TestTask.Application.Contracts;
 
-public record EnrollDTO(decimal MoneyAmount, MoneyAccountId MoneyAccountToId);
+public record EnrollDTO(CurrencyId CurrencyFromId, decimal MoneyAmount, MoneyAccountId MoneyAccountToId);

@@ -23,7 +23,7 @@ public static class Mapper
 
 	public static EnrollDTO ToDTO(this EnrollModel model)
 	{
-		return new EnrollDTO(model.MoneyAmount, new MoneyAccountId(model.MoneyAccountId));
+		return new EnrollDTO(new CurrencyId(model.CurrencyFromId), model.MoneyAmount, new MoneyAccountId(model.MoneyAccountId));
 	}
 
 	public static CommissionAddDTO ToDTO(this CommissionAddModel model)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using TestTask.Application.Common;
 using TestTask.Application.Contracts;
 using TestTask.Application.Services;
@@ -13,42 +14,47 @@ namespace TestTask.Application.Implementation.Services;
 internal class MoneyOperationService : BaseService, IMoneyOperationService
 {
 	private readonly IClock _clock;
-	public MoneyOperationService(TestTaskDbContext dbContext, IUserProvider userProvider, IServiceScopeFactory serviceScopeFactory, IClock clock) : base(dbContext, userProvider, serviceScopeFactory)
+	private readonly IExchangeRateProvider _exchangeRateProvider;
+	public MoneyOperationService(
+		TestTaskDbContext dbContext, 
+		IUserProvider userProvider, 
+		IServiceScopeFactory serviceScopeFactory, 
+		IClock clock, 
+		IExchangeRateProvider exchangeRateProvider) : base(dbContext, userProvider, serviceScopeFactory)
 	{
 		_clock = clock;
+		_exchangeRateProvider = exchangeRateProvider;
 	}
 
 	public async Task<Result<MoneyOperationId>> EnrollAsync(EnrollDTO enrollDTO, CancellationToken cancellationToken = default)
 	{
-		throw new NotImplementedException();
-		//var validationResult = Validate(enrollDTO);
-		//if (validationResult.IsFailure)
-		//{
-		//	return Result.Failure<MoneyOperationId>(validationResult.ErrorMessage);
-		//}
+		var requesterIdResult = _userProvider.GetCurrent();
+		if (requesterIdResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperationId>(requesterIdResult.ErrorMessage);
+		}
 
-		//var account = await _dbContext
-		//	.MoneyAccounts
-		//	.SingleOrDefaultAsync(e => e.Id == enrollDTO.MoneyAccountToId, cancellationToken);
+		var account = await _dbContext
+			.MoneyAccounts
+			.SingleOrDefaultAsync(e => e.Id == enrollDTO.MoneyAccountToId, cancellationToken);
 
-		//if (account is null)
-		//{
-		//	return Result.Failure<MoneyOperationId>(Errors.EntityWithPassedIdIsNotExists(nameof(MoneyAccount)));
-		//}
+		if (account is null)
+		{
+			return Result.Failure<MoneyOperationId>(Errors.EntityWithPassedIdIsNotExists(nameof(MoneyAccount)));
+		}
 
-		//account.Balance += enrollDTO.MoneyAmount;
-		//var operation = new MoneyOperation
-		//{
-		//	MoneyAmount = enrollDTO.MoneyAmount,
-		//	MoneyAccountToId = account.Id,
-		//	MoveType = MoneyMoveTypes.Adding,
-		//	OperationDate = _clock.GetUtcNow(),
-		//	OperationType = MoneyOperationTypes.Enrolment,
-		//};
+		var enrollmentCreationResult = await CreateEnrollment(enrollDTO, account);
+		if (enrollmentCreationResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperationId>(enrollmentCreationResult.ErrorMessage);
+		}
 
-		//_dbContext.MoneyOperations.Add(operation);
-		//await _dbContext.SaveChangesAsync(cancellationToken);
-		//return operation.Id;
+		var enrollment = enrollmentCreationResult.Value;
+		account.Balance += enrollment.MoneyAmount;
+
+		_dbContext.MoneyOperations.Add(enrollment);
+		await _dbContext.SaveChangesAsync(cancellationToken);
+		return enrollment.Id;
 	}
 
 	public async Task<Result<IReadOnlyCollection<MoneyOperationDTO>>> GetAllByUserIdAsync(UserId userId, CancellationToken cancellationToken = default)
@@ -103,12 +109,60 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 		throw new NotImplementedException();
 	}
 
-	//private static Result<decimal> CalculateFinalSum(decimal startAmount, decimal commission, decimal exchangeRate)
-	//{
-	//	decimal result = 0m;
-	//	if (exchangeRate != 0m)
-	//	{
+	private async Task<Result<MoneyOperation>> CreateEnrollment(EnrollDTO enrollDTO, MoneyAccount moneyAccountTo)
+	{
+		var validationResult = Validate(enrollDTO);
+		if (validationResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperation>(validationResult.ErrorMessage);
+		}
 
-	//	}
-	//}
+		if (!await _dbContext.Currencies.AnyAsync(e => e.Id == enrollDTO.CurrencyFromId))
+		{
+			return Result.Failure<MoneyOperation>(Errors.EntityWithPassedIdIsNotExists(nameof(Currency)));
+		}
+
+		decimal commission = _dbContext.Commissions.SingleOrDefault(e => e.CurrencyFromId == enrollDTO.CurrencyFromId && e.CurrencyToId == moneyAccountTo.CurrencyId)?.Value ?? Commission.DefaultValue;
+		decimal exchangeRate = enrollDTO.CurrencyFromId == moneyAccountTo.CurrencyId ? decimal.Zero : _exchangeRateProvider.GetRate(enrollDTO.CurrencyFromId, moneyAccountTo.CurrencyId).Value;
+
+
+		var finalAmountResult = CalculateFinalSum(enrollDTO.MoneyAmount, commission, exchangeRate);
+		if (finalAmountResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperation>(finalAmountResult.ErrorMessage);
+		}
+
+		decimal finalAmount = finalAmountResult.Value;
+		return new MoneyOperation
+		{
+			AppliedExchangeRate = exchangeRate,
+			AppliedCommissionValue = commission,
+			MoneyAmount = finalAmount,
+			OperationDate = _clock.GetUtcNow(),
+			MoneyAccountToId = enrollDTO.MoneyAccountToId,
+			MoveType = MoneyMoveTypes.Adding,
+			OperationType = MoneyOperationTypes.Enrolment
+		};
+	}
+
+	private static Result<decimal> CalculateFinalSum(decimal startAmount, decimal commission, decimal exchangeRate)
+	{
+		decimal result = startAmount;
+		if (exchangeRate != decimal.Zero)
+		{
+			result *= exchangeRate;
+		}
+
+		if (commission != decimal.Zero)
+		{
+			result -= (result * commission);
+		}
+		
+		if (result <= 0)
+		{
+			return Result.Failure<decimal>("Final money amount must be greater than zero.");
+		}
+
+		return result;
+	}
 }
