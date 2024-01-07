@@ -10,7 +10,7 @@ public interface IMoneyOperationService
 
 	Task<Result<MoneyOperationId>> WithdrawalAsync(WithdrawalDTO withdrawalDTO, CancellationToken cancellationToken = default);
 
-	Task<Result<MoneyOperationId>> TransferAsync(UserId requesterId, TransferDTO transferDTO, CancellationToken cancellationToken = default);
+	Task<Result> TransferAsync(TransferDTO transferDTO, CancellationToken cancellationToken = default);
 
 	Task<Result<IReadOnlyCollection<MoneyOperationDTO>>> GetAllByUserIdAsync(UserId userId, CancellationToken cancellationToken = default);
 

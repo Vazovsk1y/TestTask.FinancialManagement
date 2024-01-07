@@ -23,4 +23,12 @@ public class MoneyOperationsController(IMoneyOperationService moneyOperationServ
 		var result = await moneyOperationService.WithdrawalAsync(dto, cancellationToken);
 		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
 	}
+
+	[HttpPost("transfer")]
+	public async Task<IActionResult> TransferMoney(TransferModel transfer, CancellationToken cancellationToken)
+	{
+		var dto = transfer.ToDTO();
+		var result = await moneyOperationService.TransferAsync(dto, cancellationToken);
+		return result.IsSuccess ? Ok() : BadRequest(result.ErrorMessage);
+	}
 }

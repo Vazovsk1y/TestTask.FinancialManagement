@@ -27,6 +27,12 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 
 	public async Task<Result<MoneyOperationId>> EnrollAsync(EnrollDTO enrollDTO, CancellationToken cancellationToken = default)
 	{
+		var validationResult = Validate(enrollDTO);
+		if (validationResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperationId>(validationResult.ErrorMessage);
+		}
+
 		var requesterIdResult = _userProvider.GetCurrent();
 		if (requesterIdResult.IsFailure)
 		{
@@ -58,6 +64,12 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 
 	public async Task<Result<MoneyOperationId>> WithdrawalAsync(WithdrawalDTO withdrawalDTO, CancellationToken cancellationToken = default)
 	{
+		var validationResult = Validate(withdrawalDTO);
+		if (validationResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperationId>(validationResult.ErrorMessage);
+		}
+
 		var requesterIdResult = _userProvider.GetCurrent();
 		if (requesterIdResult.IsFailure)
 		{
@@ -73,12 +85,7 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 			return Result.Failure<MoneyOperationId>(Errors.EntityWithPassedIdIsNotExists(nameof(MoneyAccount)));
 		}
 
-		if (account.UserId != requesterIdResult.Value)
-		{
-			return Result.Failure<MoneyOperationId>(Errors.Auth.AccessDenied);
-		}
-
-		var withdrawalCreationResult = CreateWithdrawal(withdrawalDTO, account);
+		var withdrawalCreationResult = CreateWithdrawal(requesterIdResult.Value, withdrawalDTO, account);
 		if (withdrawalCreationResult.IsFailure)
 		{
 			return Result.Failure<MoneyOperationId>(withdrawalCreationResult.ErrorMessage);
@@ -90,6 +97,46 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 		_dbContext.MoneyOperations.Add(withdrawal);
 		await _dbContext.SaveChangesAsync(cancellationToken);
 		return withdrawal.Id;
+	}
+
+	public async Task<Result> TransferAsync(TransferDTO transferDTO, CancellationToken cancellationToken = default)
+	{
+		var requesterIdResult = _userProvider.GetCurrent();
+		if (requesterIdResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperationId>(requesterIdResult.ErrorMessage);
+		}
+
+		var validationResult = Validate(transferDTO);
+		if (validationResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperationId>(validationResult.ErrorMessage);
+		}
+
+		var fromAccount = await _dbContext.MoneyAccounts.SingleOrDefaultAsync(e => e.Id == transferDTO.MoneyAccountFromId, cancellationToken);
+		if (fromAccount is null)
+		{
+			return Result.Failure<MoneyOperationId>(Errors.EntityWithPassedIdIsNotExists(nameof(MoneyAccount)));
+		}
+
+		var toAccount = await _dbContext.MoneyAccounts.SingleOrDefaultAsync(e => e.Id == transferDTO.MoneyAccountToId, cancellationToken);
+		if (toAccount is null)
+		{
+			return Result.Failure<MoneyOperationId>(Errors.EntityWithPassedIdIsNotExists(nameof(MoneyAccount)));
+		}
+
+		var transfersCreationResult = CreateTransfers(requesterIdResult.Value, transferDTO, fromAccount, toAccount);
+		if (transfersCreationResult.IsFailure)
+		{
+			return Result.Failure<MoneyOperationId>(transfersCreationResult.ErrorMessage);
+		}
+
+		var (sub, add) = transfersCreationResult.Value;
+		fromAccount.Balance -= sub.MoneyAmount;
+		toAccount.Balance += add.MoneyAmount;
+		_dbContext.MoneyOperations.AddRange(sub, add);
+		await _dbContext.SaveChangesAsync(cancellationToken);
+		return Result.Success();
 	}
 
 	public async Task<Result<IReadOnlyCollection<MoneyOperationDTO>>> GetAllByUserIdAsync(UserId userId, CancellationToken cancellationToken = default)
@@ -134,29 +181,17 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 		throw new NotImplementedException();
 	}
 
-	public Task<Result<MoneyOperationId>> TransferAsync(UserId requesterId, TransferDTO transferDTO, CancellationToken cancellationToken = default)
+	private async Task<Result<MoneyOperation>> CreateEnrollment(EnrollDTO enrollDTO, MoneyAccount to)
 	{
-		throw new NotImplementedException();
-	}
-
-	private async Task<Result<MoneyOperation>> CreateEnrollment(EnrollDTO enrollDTO, MoneyAccount moneyAccountTo)
-	{
-		var validationResult = Validate(enrollDTO);
-		if (validationResult.IsFailure)
-		{
-			return Result.Failure<MoneyOperation>(validationResult.ErrorMessage);
-		}
-
 		if (!await _dbContext.Currencies.AnyAsync(e => e.Id == enrollDTO.CurrencyFromId))
 		{
 			return Result.Failure<MoneyOperation>(Errors.EntityWithPassedIdIsNotExists(nameof(Currency)));
 		}
 
-		decimal commission = _dbContext.Commissions.SingleOrDefault(e => e.CurrencyFromId == enrollDTO.CurrencyFromId && e.CurrencyToId == moneyAccountTo.CurrencyId)?.Value ?? Commission.DefaultValue;
-		decimal exchangeRate = enrollDTO.CurrencyFromId == moneyAccountTo.CurrencyId ? decimal.Zero : _exchangeRateProvider.GetRate(enrollDTO.CurrencyFromId, moneyAccountTo.CurrencyId).Value;
+		decimal commission = _dbContext.Commissions.SingleOrDefault(e => e.CurrencyFromId == enrollDTO.CurrencyFromId && e.CurrencyToId == to.CurrencyId)?.Value ?? Commission.DefaultValue;
+		decimal exchangeRate = enrollDTO.CurrencyFromId == to.CurrencyId ? decimal.Zero : _exchangeRateProvider.GetRate(enrollDTO.CurrencyFromId, to.CurrencyId).Value;
 
-
-		var finalAmountResult = CalculateFinalSum(enrollDTO.MoneyAmount, commission, exchangeRate);
+		var finalAmountResult = CalculateFinalSum(enrollDTO.MoneyAmount, commission, exchangeRate, false);
 		if (finalAmountResult.IsFailure)
 		{
 			return Result.Failure<MoneyOperation>(finalAmountResult.ErrorMessage);
@@ -175,15 +210,14 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 		};
 	}
 
-	private Result<MoneyOperation> CreateWithdrawal(WithdrawalDTO withdrawalDTO, MoneyAccount account)
+	private Result<MoneyOperation> CreateWithdrawal(UserId requesterId, WithdrawalDTO withdrawalDTO, MoneyAccount from)
 	{
-		var validationResult = Validate(withdrawalDTO);
-		if (validationResult.IsFailure)
+		if (from.UserId != requesterId)
 		{
-			return Result.Failure<MoneyOperation>(validationResult.ErrorMessage);
+			return Result.Failure<MoneyOperation>(Errors.Auth.AccessDenied);
 		}
 
-		if (account.Balance < withdrawalDTO.MoneyAmount)
+		if (from.Balance < withdrawalDTO.MoneyAmount)
 		{
 			return Result.Failure<MoneyOperation>("Not enough money on balance.");
 		}
@@ -200,7 +234,59 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 		};
 	}
 
-	private static Result<decimal> CalculateFinalSum(decimal startAmount, decimal commission, decimal exchangeRate)
+	private Result<(MoneyOperation transferSub, MoneyOperation transferAdd)> CreateTransfers(UserId requesterId, TransferDTO transferDTO, MoneyAccount from, MoneyAccount to)
+	{
+		if (from.UserId != requesterId)
+		{
+			return Result.Failure<(MoneyOperation, MoneyOperation)>(Errors.Auth.AccessDenied);
+		}
+
+		decimal commission = _dbContext.Commissions.SingleOrDefault(e => e.CurrencyFromId == from.CurrencyId && e.CurrencyToId == to.CurrencyId)?.Value ?? Commission.DefaultValue;
+		decimal exchangeRate = from.CurrencyId == to.CurrencyId ? 
+			decimal.Zero 
+			: 
+			_exchangeRateProvider.GetRate(from.CurrencyId, to.CurrencyId).Value;
+
+		var finalAmountResult = CalculateFinalSum(transferDTO.MoneyAmount, commission, exchangeRate, true);
+		if (finalAmountResult.IsFailure)
+		{
+			return Result.Failure<(MoneyOperation, MoneyOperation)> (finalAmountResult.ErrorMessage);
+		}
+
+		decimal finalAmount = finalAmountResult.Value;
+		if (from.Balance < finalAmount)
+		{
+			return Result.Failure<(MoneyOperation, MoneyOperation)>("Not enough money on balance.");
+		}
+
+		var transferSub = new MoneyOperation
+		{
+			MoneyAccountFromId = from.Id,
+			MoneyAccountToId = to.Id,
+			AppliedCommissionValue = commission,
+			AppliedExchangeRate = exchangeRate,
+			OperationDate = _clock.GetUtcNow(),
+			MoneyAmount = finalAmount,
+			MoveType = MoneyMoveTypes.Substracting,
+			OperationType = MoneyOperationTypes.Transfer
+		};
+
+		var transferAdd = new MoneyOperation
+		{
+			MoneyAccountFromId = from.Id,
+			MoneyAccountToId = to.Id,
+			AppliedCommissionValue = decimal.Zero,
+			AppliedExchangeRate = decimal.Zero,
+			OperationDate = _clock.GetUtcNow(),
+			MoneyAmount = finalAmount,
+			MoveType = MoneyMoveTypes.Adding,
+			OperationType = MoneyOperationTypes.Transfer
+		};
+
+		return (transferSub, transferAdd);
+	}
+
+	private static Result<decimal> CalculateFinalSum(decimal startAmount, decimal commission, decimal exchangeRate, bool addCommission)
 	{
 		decimal result = startAmount;
 		if (exchangeRate != decimal.Zero)
@@ -210,12 +296,12 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 
 		if (commission != decimal.Zero)
 		{
-			result -= (result * commission);
+			result = addCommission ? result + (result * commission) : result - (result * commission);
 		}
 		
 		if (result <= 0)
 		{
-			return Result.Failure<decimal>("Final money amount must be greater than zero.");
+			return Result.Failure<decimal>("Too small money amount.");
 		}
 
 		return result;

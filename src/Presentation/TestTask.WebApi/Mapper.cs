@@ -35,4 +35,9 @@ public static class Mapper
 	{
 		return new WithdrawalDTO(new MoneyAccountId(model.MoneyAccountFromId), model.MoneyAmount);
 	}
+
+	public static TransferDTO ToDTO(this TransferModel model)
+	{
+		return new TransferDTO(new MoneyAccountId(model.MoneyAccountFromId), new MoneyAccountId(model.MoneyAccountToId), model.MoneyAmount);
+	}
 }
