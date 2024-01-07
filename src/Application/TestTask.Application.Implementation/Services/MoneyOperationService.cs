@@ -176,9 +176,35 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 		return result;
 	}
 
-	public Task<Result<IReadOnlyCollection<MoneyOperationDTO>>> GetAllByMoneyAccountIdAsync(UserId requesterId, MoneyAccountId moneyAccountId, CancellationToken cancellationToken = default)
+	public async Task<Result<IReadOnlyCollection<MoneyOperationDTO>>> GetAllByMoneyAccountIdAsync(MoneyAccountId moneyAccountId, CancellationToken cancellationToken = default)
 	{
-		throw new NotImplementedException();
+		var requesterIdResult = _userProvider.GetCurrent();
+		if (requesterIdResult.IsFailure)
+		{
+			return Result.Failure<IReadOnlyCollection<MoneyOperationDTO>>(requesterIdResult.ErrorMessage);
+		}
+
+		var requester = await _dbContext
+			.Users
+			.Include(e => e.Roles)
+			.ThenInclude(e => e.Role)
+			.Include(e => e.MoneyAccounts)
+		    .GetById(requesterIdResult.Value);
+
+		bool actionPermitted = requester!.IsInRole(DefaultRoles.Admin) || requester!.MoneyAccounts.Any(e => e.Id == moneyAccountId);
+		if (!actionPermitted)
+		{
+			return Result.Failure<IReadOnlyCollection<MoneyOperationDTO>>(Errors.Auth.AccessDenied);
+		}
+
+		var result = await _dbContext
+			.MoneyOperations
+			.AsNoTracking()
+			.Where(e => e.MoneyAccountFromId == moneyAccountId || e.MoneyAccountToId == moneyAccountId)
+			.Select(e => e.ToDTO())
+			.ToListAsync(cancellationToken);
+
+		return result;
 	}
 
 	private async Task<Result<MoneyOperation>> CreateEnrollment(EnrollDTO enrollDTO, MoneyAccount to)
