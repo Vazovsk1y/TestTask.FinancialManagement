@@ -13,7 +13,14 @@ internal class CommissionConfiguration : IEntityTypeConfiguration<Commission>
 
 		builder.Property(e => e.Value).HasPrecision(Constraints.Commission.ValuePrecision.Precision, Constraints.Commission.ValuePrecision.Scale);
 
-		builder.ConfigureValueIdProperty(e => e.CurrencyFromId);
-		builder.ConfigureValueIdProperty(e => e.CurrencyToId);
+		builder.HasOne(e => e.From)
+			.WithMany()
+			.HasForeignKey(e => e.CurrencyFromId)
+			.OnDelete(DeleteBehavior.NoAction);
+
+		builder.HasOne(e => e.To)
+			.WithMany()
+			.HasForeignKey(e => e.CurrencyToId)
+			.OnDelete(DeleteBehavior.NoAction);
 	}
 }

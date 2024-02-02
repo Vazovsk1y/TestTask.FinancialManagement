@@ -5,7 +5,7 @@ namespace TestTask.DAL;
 
 public class TestTaskDbContextDesingTimeFactory : IDesignTimeDbContextFactory<TestTaskDbContext>
 {
-	private const string ConnectionString = $"Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=PenisDataBase;Integrated Security=True;Connect Timeout=30;";
+	private const string ConnectionString = $"Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CurrecncyExchangeDb;Integrated Security=True;Connect Timeout=30;";
 
 	public TestTaskDbContext CreateDbContext(string[] args)
 	{

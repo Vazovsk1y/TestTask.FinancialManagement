@@ -20,7 +20,12 @@ internal class MoneyOperationConfiguration : IEntityTypeConfiguration<MoneyOpera
 		builder.Property(e => e.AppliedCommissionValue).HasPrecision(Constraints.Commission.ValuePrecision.Precision, Constraints.Commission.ValuePrecision.Precision);
 		builder.Property(e => e.AppliedExchangeRate).HasPrecision(Constraints.MoneyOperation.MoneyAmountPrecision.Precision, Constraints.MoneyOperation.MoneyAmountPrecision.Scale);
 
-		builder.ConfigureNullableValueIdProperty(e => e.MoneyAccountFromId);
-		builder.ConfigureNullableValueIdProperty(e => e.MoneyAccountToId);
-	}
+        builder.HasOne(e => e.From)
+            .WithMany()
+            .HasForeignKey(e => e.MoneyAccountFromId);
+
+        builder.HasOne(e => e.To)
+            .WithMany()
+            .HasForeignKey(e => e.MoneyAccountToId);
+    }
 }
