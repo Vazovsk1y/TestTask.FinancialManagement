@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TestTask.DAL.Configurations;
 using TestTask.Domain.Entities;
 
 namespace TestTask.DAL;
@@ -19,6 +18,8 @@ public class TestTaskDbContext(DbContextOptions contextOptions) : DbContext(cont
 	public DbSet<MoneyOperation> MoneyOperations { get; set; }
 
 	public DbSet<Currency> Currencies { get; set; }
+
+	public DbSet<ExchangeRate> ExchangeRates { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

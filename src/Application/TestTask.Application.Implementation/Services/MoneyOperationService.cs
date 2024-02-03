@@ -13,16 +13,13 @@ namespace TestTask.Application.Implementation.Services;
 internal class MoneyOperationService : BaseService, IMoneyOperationService
 {
 	private readonly IClock _clock;
-	private readonly IExchangeRateProvider _exchangeRateProvider;
 	public MoneyOperationService(
 		TestTaskDbContext dbContext, 
 		IUserProvider userProvider, 
 		IServiceScopeFactory serviceScopeFactory, 
-		IClock clock, 
-		IExchangeRateProvider exchangeRateProvider) : base(dbContext, userProvider, serviceScopeFactory)
+		IClock clock) : base(dbContext, userProvider, serviceScopeFactory)
 	{
 		_clock = clock;
-		_exchangeRateProvider = exchangeRateProvider;
 	}
 
 	public async Task<Result<MoneyOperationId>> EnrollAsync(EnrollDTO enrollDTO, CancellationToken cancellationToken = default)
@@ -219,9 +216,11 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 			:
 			_dbContext.Commissions.SingleOrDefault(e => e.CurrencyFromId == enrollDTO.CurrencyFromId && e.CurrencyToId == to.CurrencyId)?.Value ?? Commission.DefaultValue;
 
-		decimal exchangeRate = enrollDTO.CurrencyFromId == to.CurrencyId ? decimal.Zero : _exchangeRateProvider.GetRate(enrollDTO.CurrencyFromId, to.CurrencyId).Value;
+		var exchangeRate = await _dbContext.ExchangeRates
+			.SingleAsync(e => e.CurrencyFromId == enrollDTO.CurrencyFromId && e.CurrencyToId == to.CurrencyId);
 
-		var finalAmountResult = CalculateFinalSum(enrollDTO.MoneyAmount, commission, exchangeRate, false);
+		decimal exchangeRateValue = exchangeRate.Value;
+		var finalAmountResult = CalculateFinalSum(enrollDTO.MoneyAmount, commission, exchangeRateValue, false);
 		if (finalAmountResult.IsFailure)
 		{
 			return Result.Failure<MoneyOperation>(finalAmountResult.ErrorMessage);
@@ -230,7 +229,7 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 		decimal finalAmount = finalAmountResult.Value;
 		return new MoneyOperation
 		{
-			AppliedExchangeRate = exchangeRate,
+			AppliedExchangeRate = exchangeRateValue,
 			AppliedCommissionValue = commission,
 			MoneyAmount = finalAmount,
 			OperationDate = _clock.GetUtcNow(),
@@ -272,12 +271,12 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 		}
 
 		decimal commission = _dbContext.Commissions.SingleOrDefault(e => e.CurrencyFromId == from.CurrencyId && e.CurrencyToId == to.CurrencyId)?.Value ?? Commission.DefaultValue;
-		decimal exchangeRate = from.CurrencyId == to.CurrencyId ? 
-			decimal.Zero 
-			: 
-			_exchangeRateProvider.GetRate(from.CurrencyId, to.CurrencyId).Value;
+        var exchangeRate = _dbContext.ExchangeRates
+            .Single(e => e.CurrencyFromId == from.CurrencyId && e.CurrencyToId == to.CurrencyId);
 
-		var finalAmountResult = CalculateFinalSum(transferDTO.MoneyAmount, commission, exchangeRate, true);
+        decimal exchangeRateValue = exchangeRate.Value;
+
+        var finalAmountResult = CalculateFinalSum(transferDTO.MoneyAmount, commission, exchangeRateValue, true);
 		if (finalAmountResult.IsFailure)
 		{
 			return Result.Failure<(MoneyOperation, MoneyOperation)> (finalAmountResult.ErrorMessage);
@@ -294,7 +293,7 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 			MoneyAccountFromId = from.Id,
 			MoneyAccountToId = to.Id,
 			AppliedCommissionValue = commission,
-			AppliedExchangeRate = exchangeRate,
+			AppliedExchangeRate = exchangeRateValue,
 			OperationDate = _clock.GetUtcNow(),
 			MoneyAmount = finalAmount,
 			MoveType = MoneyMoveTypes.Substracting,

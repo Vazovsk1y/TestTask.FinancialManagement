@@ -6,7 +6,7 @@ namespace TestTask.DAL;
 
 internal static class DatabaseSeeder
 {
-	private static readonly IReadOnlyCollection<Currency> _currencies = new (string title, string numCode, string alphCode)[]
+	private static readonly IList<Currency> _currencies = new (string title, string numCode, string alphCode)[]
 	{
 		DefaultCurrencies.USD,
 		DefaultCurrencies.EUR,
@@ -81,11 +81,42 @@ internal static class DatabaseSeeder
 		},
 	};
 
+	private static IReadOnlyCollection<ExchangeRate> ExchangeRates 
+	{ 
+		get 
+		{
+			var result = new List<ExchangeRate>();
+			var date = DateTimeOffset.UtcNow;
+
+            for (int i = 0; i < _currencies.Count; i++)
+            {
+                for (int j = 0; j < _currencies.Count; j++)
+                {
+                    if (i != j)
+					{
+						var exchangeRate = new ExchangeRate
+						{
+							CurrencyFromId = _currencies[i].Id,
+							CurrencyToId = _currencies[j].Id,
+							Value = (decimal)(Random.Shared.NextDouble() * (10.0 - 0.1) + 0.1),
+							UpdatedAt = date,
+						};
+
+						result.Add(exchangeRate);
+					}
+                }
+            }
+
+            return result;
+	    }
+	}
+
 	public static void SeedData(this ModelBuilder modelBuilder)
 	{
 		modelBuilder.Entity<Currency>().HasData(_currencies);
 		modelBuilder.Entity<Role>().HasData(_roles);
 		modelBuilder.Entity<Commission>().HasData(_commissions);
+		modelBuilder.Entity<ExchangeRate>().HasData(ExchangeRates);
 
 		var users = _usersSeed
 		.Select(e => new User

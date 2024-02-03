@@ -11,11 +11,20 @@ namespace TestTask.Application.Implementation.Services;
 
 internal class CurrencyService : BaseService, ICurrencyService
 {
-	public CurrencyService(TestTaskDbContext dbContext, IUserProvider userProvider, IServiceScopeFactory serviceScopeFactory) : base(dbContext, userProvider, serviceScopeFactory)
-	{
-	}
+	private readonly IExchangeRateProvider _exchangeRateProvider;
+	private readonly IClock _clock;
+    public CurrencyService(
+        TestTaskDbContext dbContext,
+        IUserProvider userProvider,
+        IServiceScopeFactory serviceScopeFactory,
+        IExchangeRateProvider exchangeRateProvider,
+        IClock clock) : base(dbContext, userProvider, serviceScopeFactory)
+    {
+        _exchangeRateProvider = exchangeRateProvider;
+        _clock = clock;
+    }
 
-	public async Task<Result<CurrencyId>> AddAsync(CurrencyAddDTO currencyAddDTO, CancellationToken cancellationToken = default)
+    public async Task<Result<CurrencyId>> AddAsync(CurrencyAddDTO currencyAddDTO, CancellationToken cancellationToken = default)
 	{
 		var requesterIdResult = _userProvider.GetCurrent();
 		if (requesterIdResult.IsFailure)
@@ -42,7 +51,30 @@ internal class CurrencyService : BaseService, ICurrencyService
 		}
 
 		var currency = currencyCreationResult.Value;
-		_dbContext.Currencies.Add(currency);
+
+		var currencies = await _dbContext.Currencies.Select(c => new { c.Id, c.AlphabeticCode }).ToListAsync(cancellationToken);
+		var date = _clock.GetUtcNow();
+
+		// TODO: check GetRate result
+        var exchangeRates = currencies
+            .Select(e => new ExchangeRate
+            {
+                CurrencyFromId = currency.Id,
+                CurrencyToId = e.Id,
+                UpdatedAt = date,
+                Value = _exchangeRateProvider.GetRate(currency.AlphabeticCode, e.AlphabeticCode).Value,
+            })
+            .Union(currencies.Select(e => new ExchangeRate
+            {
+                CurrencyFromId = e.Id,
+                CurrencyToId = currency.Id,
+                UpdatedAt = date,
+                Value = _exchangeRateProvider.GetRate(e.AlphabeticCode, currency.AlphabeticCode).Value,
+            }));
+
+        _dbContext.Currencies.Add(currency);
+		_dbContext.ExchangeRates.AddRange(exchangeRates);
+
 		await _dbContext.SaveChangesAsync(cancellationToken);
 		return currency.Id;
 	}
