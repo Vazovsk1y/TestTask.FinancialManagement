@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\TestTask.Application.Implementation\TestTask.Application.Implementation.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\TestTask.BackgroundJobs\TestTask.BackgroundJobs.csproj" />
     <ProjectReference Include="..\..\Infrastructure\TestTask.DAL\TestTask.DAL.csproj" />
   </ItemGroup>
 

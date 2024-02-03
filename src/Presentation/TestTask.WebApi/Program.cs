@@ -4,6 +4,9 @@ using TestTask.WebApi;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using FluentValidation;
 using TestTask.WebApi.Validators;
+using TestTask.BackgroundJobs;
+using Hangfire;
+using TestTask.WebApi.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddSwaggerWithJwt();
 builder.Services.AddAuthenticationWithJwtBearer(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddBackgroundJobs(builder.Configuration);
 
 builder.Services.AddValidatorsFromAssembly(typeof(UserCredentialsModelValidator).Assembly);
 builder.Services.AddFluentValidationAutoValidation();
@@ -34,6 +38,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseHangfireDashboard(options: new DashboardOptions
+{
+	Authorization = [ new HangfireDashboardAuthorizationFilter(builder.Environment) ]
+});
 
 if (app.Environment.IsDevelopment())
 {
