@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TestTask.Application.Services;
 using TestTask.Domain.Constants;
 using TestTask.WebApi.Common;
+using TestTask.WebApi.Filters;
 using TestTask.WebApi.Validators;
 using TestTask.WebApi.ViewModels;
 
@@ -25,5 +26,13 @@ public class CommissionsController(ICommissionService commissionService) : Autho
 	{
 		var result = await commissionService.GetAllAsync(cancellationToken);
 		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
+	}
+
+	[HttpDelete("{id}")]
+	[PermittedTo(DefaultRoles.Admin)]
+	[NotAllowed]
+	public Task<IActionResult> DeleteCommissionById(Guid id, CancellationToken cancellationToken)
+	{
+		throw new NotImplementedException();
 	}
 }
