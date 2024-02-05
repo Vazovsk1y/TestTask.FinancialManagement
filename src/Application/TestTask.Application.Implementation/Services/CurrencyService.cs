@@ -11,16 +11,13 @@ namespace TestTask.Application.Implementation.Services;
 
 internal class CurrencyService : BaseService, ICurrencyService
 {
-	private readonly IExchangeRateProvider _exchangeRateProvider;
 	private readonly IClock _clock;
     public CurrencyService(
         TestTaskDbContext dbContext,
         IUserProvider userProvider,
         IServiceScopeFactory serviceScopeFactory,
-        IExchangeRateProvider exchangeRateProvider,
         IClock clock) : base(dbContext, userProvider, serviceScopeFactory)
     {
-        _exchangeRateProvider = exchangeRateProvider;
         _clock = clock;
     }
 
@@ -55,21 +52,23 @@ internal class CurrencyService : BaseService, ICurrencyService
 		var currencies = await _dbContext.Currencies.Select(c => new { c.Id, c.AlphabeticCode }).ToListAsync(cancellationToken);
 		var date = _clock.GetUtcNow();
 
-		// TODO: check GetRate result
+		// TODO: use exchange rate provider instead of genering random values.
+		// now i'm using random values because i have limited free month calls to the external api.
+
         var exchangeRates = currencies
             .Select(e => new ExchangeRate
             {
                 CurrencyFromId = currency.Id,
                 CurrencyToId = e.Id,
                 UpdatedAt = date,
-                Value = _exchangeRateProvider.GetRate(currency.AlphabeticCode, e.AlphabeticCode).Value,
+                Value = (decimal)(Random.Shared.NextDouble() * (10.0 - 0.1) + 0.1),
             })
             .Union(currencies.Select(e => new ExchangeRate
             {
                 CurrencyFromId = e.Id,
                 CurrencyToId = currency.Id,
                 UpdatedAt = date,
-                Value = _exchangeRateProvider.GetRate(e.AlphabeticCode, currency.AlphabeticCode).Value,
+                Value = (decimal)(Random.Shared.NextDouble() * (10.0 - 0.1) + 0.1),
             }));
 
         _dbContext.Currencies.Add(currency);
