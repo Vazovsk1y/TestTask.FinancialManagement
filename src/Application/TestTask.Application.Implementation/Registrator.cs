@@ -17,7 +17,6 @@ public static class Registrator
 		.AddScoped<ITokenProvider, JwtTokenProvider>()
 		.AddScoped<IUserProvider, HttpContextUserProvider>()
 		.AddScoped<IClock, Clock>()
-		.AddTransient<IExchangeRateProvider, RandomExchangeRateProvider>()
 		.AddValidatorsFromAssembly(typeof(UserCredentialsDTOValidator).Assembly)
 		;
 }

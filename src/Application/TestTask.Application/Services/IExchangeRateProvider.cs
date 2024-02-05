@@ -5,5 +5,5 @@ namespace TestTask.Application.Services;
 
 public interface IExchangeRateProvider
 {
-	Task<Result<IReadOnlyDictionary<CurrencyId, decimal>>> GetRatesAsync(CurrencyId baseCurrency, CancellationToken cancellationToken = default);
+	Task<Result<IReadOnlyDictionary<CurrencyId, decimal>>> GetRatesAsync(CurrencyId baseCurrencyId, CancellationToken cancellationToken = default);
 }
