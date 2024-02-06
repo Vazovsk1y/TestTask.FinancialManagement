@@ -12,6 +12,8 @@ public static class Registrator
     {
         services.Configure<ExchangeRateProviderOptions>(configuration.GetSection(ExchangeRateProviderOptions.SectionName));
 
+        services.AddMemoryCache();
+
         services.AddHttpClient<IExchangeRateProvider, ExchangeRateProvider>((services, client) =>
         {
             // stores in secrets.json
