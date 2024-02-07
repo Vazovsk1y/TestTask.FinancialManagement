@@ -6,20 +6,16 @@ namespace TestTask.DAL;
 
 internal static class DatabaseSeeder
 {
-	private static readonly IList<Currency> _currencies = new (string title, string numCode, string alphCode)[]
-	{
-		DefaultCurrencies.USD,
-		DefaultCurrencies.EUR,
-		DefaultCurrencies.UAH,
-		DefaultCurrencies.GBP,
-		DefaultCurrencies.JPY,
-		DefaultCurrencies.RUB
-	}
+	private const int CurrenciesCount = 5;
+
+	private static readonly IList<Currency> _currencies = Currencies
+	.Supported
+	.Take(CurrenciesCount)
 	.Select(e => new Currency
 	{
-		Title = e.title,
-		AlphabeticCode = e.alphCode,
-		NumericCode = e.numCode,
+		Title = e.Title,
+		AlphabeticCode = e.AlphabeticCode,
+		NumericCode = e.NumericCode,
 	})
 	.ToList();
 
@@ -52,36 +48,34 @@ internal static class DatabaseSeeder
 		}
 	};
 
-	private static readonly IReadOnlyCollection<Commission> _commissions = new Commission[]
-	{
-		new() {
-			CurrencyFromId = _currencies.Single(e => e.NumericCode == DefaultCurrencies.UAH.NumericCode).Id,
-			CurrencyToId = _currencies.Single(e => e.NumericCode == DefaultCurrencies.RUB.NumericCode).Id,
-			Value = 0.1m
-		},
-		new() {
-			CurrencyFromId = _currencies.Single(e => e.NumericCode == DefaultCurrencies.RUB.NumericCode).Id,
-			CurrencyToId = _currencies.Single(e => e.NumericCode == DefaultCurrencies.UAH.NumericCode).Id,
-			Value = 0.21m
-		},
-		new() {
-			CurrencyFromId = _currencies.Single(e => e.NumericCode == DefaultCurrencies.USD.NumericCode).Id,
-			CurrencyToId = _currencies.Single(e => e.NumericCode == DefaultCurrencies.UAH.NumericCode).Id,
-			Value = 0.14m
-		},
-		new() {
-			CurrencyFromId = _currencies.Single(e => e.NumericCode == DefaultCurrencies.UAH.NumericCode).Id,
-			CurrencyToId = _currencies.Single(e => e.NumericCode == DefaultCurrencies.USD.NumericCode).Id,
-			Value = 0.08m
-		},
-		new() {
-			CurrencyFromId = _currencies.Single(e => e.NumericCode == DefaultCurrencies.RUB.NumericCode).Id,
-			CurrencyToId = _currencies.Single(e => e.NumericCode == DefaultCurrencies.EUR.NumericCode).Id,
-			Value = 0.15m
-		},
-	};
+    private static IReadOnlyCollection<Commission> Commissions
+    {
+        get
+        {
+            var result = new List<Commission>();
+            for (int i = 0; i < _currencies.Count; i++)
+            {
+                for (int j = 0; j < _currencies.Count; j++)
+                {
+                    if (j != i)
+					{
+						var commission = new Commission
+						{
+							CurrencyFromId = _currencies[i].Id,
+							CurrencyToId = _currencies[j].Id,
+							Value = (decimal)(Random.Shared.NextDouble() * (10.0 - 0.1) + 0.1),
+                        };
 
-	private static IReadOnlyCollection<ExchangeRate> ExchangeRates 
+						result.Add(commission);
+					}
+                }
+            }
+
+            return result;
+        }
+    }
+
+    private static IReadOnlyCollection<ExchangeRate> ExchangeRates 
 	{ 
 		get 
 		{
@@ -115,7 +109,7 @@ internal static class DatabaseSeeder
 	{
 		modelBuilder.Entity<Currency>().HasData(_currencies);
 		modelBuilder.Entity<Role>().HasData(_roles);
-		modelBuilder.Entity<Commission>().HasData(_commissions);
+		modelBuilder.Entity<Commission>().HasData(Commissions);
 		modelBuilder.Entity<ExchangeRate>().HasData(ExchangeRates);
 
 		var users = _usersSeed

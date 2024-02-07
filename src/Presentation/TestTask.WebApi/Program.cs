@@ -7,6 +7,7 @@ using TestTask.WebApi.Validators;
 using TestTask.BackgroundJobs;
 using Hangfire;
 using TestTask.WebApi.Filters;
+using TestTask.ExchangeRateApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddSwaggerWithJwt();
 builder.Services.AddAuthenticationWithJwtBearer(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddBackgroundJobs(builder.Configuration);
+builder.Services.AddExchangeRateProvider(builder.Configuration);
 
 builder.Services.AddValidatorsFromAssembly(typeof(UserCredentialsModelValidator).Assembly);
 builder.Services.AddFluentValidationAutoValidation();

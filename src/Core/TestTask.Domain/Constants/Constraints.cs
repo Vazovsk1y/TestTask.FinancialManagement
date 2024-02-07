@@ -13,13 +13,18 @@ public static partial class Constraints
 
     public static class ExchangeRate
     {
-        public static readonly (int Precision, int Scale) ValuePrecision = (4, 2);
+        public static readonly (int Precision, int Scale) ValuePrecision = (19, 4);
     }
 
     public static class Currency
 	{
 		public const int MaxTitleLength = 75;
-	}
+
+        public static bool IsSupported(string title, string alphabeticCode, string numericCode)
+        {
+            return Currencies.Supported.Any(e => e == (title, alphabeticCode, numericCode));
+        }
+    }
 
 	public static class CurrencyCodes
 	{
@@ -44,7 +49,7 @@ public static partial class Constraints
 
 			foreach (char c in alphabeticCode)
 			{
-				if (!IsLatinLetter(c) || !Char.IsUpper(c))
+				if (!IsLatinLetter(c) || !char.IsUpper(c))
 				{
 					return false;
 				}
