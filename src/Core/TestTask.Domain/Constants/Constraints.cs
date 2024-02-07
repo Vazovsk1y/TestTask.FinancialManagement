@@ -13,7 +13,7 @@ public static partial class Constraints
 
     public static class ExchangeRate
     {
-        public static readonly (int Precision, int Scale) ValuePrecision = (4, 2);
+        public static readonly (int Precision, int Scale) ValuePrecision = (19, 4);
     }
 
     public static class Currency

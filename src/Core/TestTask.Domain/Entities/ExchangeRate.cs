@@ -8,7 +8,7 @@ public class ExchangeRate : Entity<ExchangeRateId>
 
     public required CurrencyId CurrencyToId { get; init; }
 
-    public required decimal Value { get; init; }
+    public required decimal Value { get; set; }
 
     public required DateTimeOffset UpdatedAt { get; set; }
 

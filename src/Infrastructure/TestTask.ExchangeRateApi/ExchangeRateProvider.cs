@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -13,27 +14,30 @@ namespace TestTask.ExchangeRateApi;
 internal class ExchangeRateProvider(
     IOptions<ExchangeRateProviderOptions> options,
     HttpClient httpClient,
-    TestTaskDbContext dbContext,
+    IServiceScopeFactory serviceScopeFactory,
     IMemoryCache cache) : IExchangeRateProvider
 {
     private readonly HttpClient _httpClient = httpClient;
     private readonly ExchangeRateProviderOptions _options = options.Value;
-    private readonly TestTaskDbContext _dbContext = dbContext;
+    private readonly IServiceScopeFactory _serviceScopeFactory = serviceScopeFactory;
     private readonly IMemoryCache _cache = cache;
     private static readonly TimeSpan CACHE_DURATION = TimeSpan.FromHours(6);
 
-    public async Task<Result<IReadOnlyDictionary<CurrencyId, decimal>>> GetRatesAsync(CurrencyId baseCurrencyId, CancellationToken cancellationToken = default)
+    public async Task<Result<ExchangeRateResponse>> GetRatesAsync(CurrencyId baseCurrencyId, CancellationToken cancellationToken = default)
     {
-        var currency = await _dbContext
+        using var scope = _serviceScopeFactory.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<TestTaskDbContext>();
+
+        var baseCurrency = await dbContext
             .Currencies
             .SingleOrDefaultAsync(e => e.Id == baseCurrencyId, cancellationToken);
 
-        if (currency is null)
+        if (baseCurrency is null)
         {
-            return Result.Failure<IReadOnlyDictionary<CurrencyId, decimal>>($"Currency with passed id is not exists.");
+            return Result.Failure<ExchangeRateResponse>($"Currency with passed id is not exists.");
         }
 
-        string baseCurencyCode = currency.AlphabeticCode;
+        string baseCurencyCode = baseCurrency.AlphabeticCode;
         string url = $"{_options.ApiKey}/latest/{baseCurencyCode}";
 
         ExchangeRateApiResponse? apiResponse;
@@ -47,15 +51,15 @@ internal class ExchangeRateProvider(
             _cache.Set(baseCurencyCode, apiResponse, CACHE_DURATION);
         }
 
-        var currencies = await _dbContext
+        var currencies = await dbContext
             .Currencies
             .AsNoTracking()
-            .Where(e => e.Id != currency.Id)
+            .Where(e => e.Id != baseCurrency.Id)
             .Select(e => new { e.Id, e.AlphabeticCode })
             .ToListAsync(cancellationToken);
 
         var result = currencies.ToDictionary(k => k.Id, v => apiResponse!.ConversionRates[v.AlphabeticCode]);
-        return result;
+        return new ExchangeRateResponse(baseCurrencyId, result);
     }
 
     private record ExchangeRateApiResponse(
