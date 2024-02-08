@@ -25,6 +25,5 @@ public class TestTaskDbContext(DbContextOptions contextOptions) : DbContext(cont
 	{
 		base.OnModelCreating(modelBuilder);
 		modelBuilder.ApplyConfigurationsFromAssembly(typeof(TestTaskDbContext).Assembly);
-		modelBuilder.SeedData();
 	}
 }

@@ -48,6 +48,10 @@ app.UseHangfireDashboard(options: new DashboardOptions
 if (app.Environment.IsDevelopment())
 {
 	app.MigrateDatabase();
+	app.SeedDatabase();
 }
 
 app.Run();
+
+
+public partial class Program { }
