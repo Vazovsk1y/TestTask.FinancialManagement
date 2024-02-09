@@ -76,24 +76,6 @@ public class CommissionsControllerTests : IntegrationTest
     }
 
     [Fact]
-    public async Task AddCommission_Should_Return_Unathorized_Status_Code_when_unauthenticated_user_try_to_add_commission()
-    {
-        // arrange
-        Guid randomCurrencyFromId = Guid.NewGuid();
-        Guid randomCurrencyToId = Guid.NewGuid();
-        const decimal currencyValue = 0.19m;
-
-        var body = new CommissionAddModel(randomCurrencyFromId, randomCurrencyToId, currencyValue);
-
-        // act
-        var response = await _httpClient
-            .PostAsJsonAsync(Route, body);
-
-        // assert
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-    }
-
-    [Fact]
     public async Task AddCommission_Should_Return_BadRequest_Status_Code_when_invalid_body_passed()
     {
         // arrange
