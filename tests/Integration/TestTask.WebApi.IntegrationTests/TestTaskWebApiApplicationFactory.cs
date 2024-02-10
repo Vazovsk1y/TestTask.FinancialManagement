@@ -32,13 +32,13 @@ public class TestTaskWebApiApplicationFactory :
     })
     .ToList();
 
-    public readonly UserRegisterModel Admin = new
+    public readonly UserRegisterModel AdminRegisterModel = new
     (
         "Mike Vazovsk1y",
         new UserCredentialsModel("testEmail@gmail.com", "strongPassword228#")
     );
 
-    public readonly UserRegisterModel User = new
+    public readonly UserRegisterModel UserRegisterModel = new
     (
         "Simple User",
         new UserCredentialsModel("simpleUser@gmail.com", "notStrongPassword228#")
@@ -95,16 +95,16 @@ public class TestTaskWebApiApplicationFactory :
 
         var admin = new User
         {
-            Email = Admin.Credentials.Email,
-            FullName = Admin.FullName,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(Admin.Credentials.Password),
+            Email = AdminRegisterModel.Credentials.Email,
+            FullName = AdminRegisterModel.FullName,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(AdminRegisterModel.Credentials.Password),
         };
 
         var simpleUser = new User
         {
-            Email = User.Credentials.Email,
-            FullName = User.FullName,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(User.Credentials.Password),
+            Email = UserRegisterModel.Credentials.Email,
+            FullName = UserRegisterModel.FullName,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(UserRegisterModel.Credentials.Password),
         };
 
         var usersRoles = new List<UserRole>()

@@ -35,8 +35,8 @@ public class CommissionsControllerTests : IntegrationTest
         _dbContext.Currencies.AddRange(currencyFrom, currencyTo);
         await _dbContext.SaveChangesAsync();
 
-        const decimal currencyValue = 0.14m;
-        var body = new CommissionAddModel(currencyFrom.Id.Value, currencyTo.Id.Value, currencyValue);
+        const decimal commssionValue = 0.14m;
+        var body = new CommissionAddModel(currencyFrom.Id.Value, currencyTo.Id.Value, commssionValue);
         string token = await LoginAsAdminAsync();
 
         // act
@@ -61,9 +61,9 @@ public class CommissionsControllerTests : IntegrationTest
         // arrange
         Guid randomCurrencyFromId = Guid.NewGuid();
         Guid randomCurrencyToId = Guid.NewGuid();
-        const decimal currencyValue = 0.18m;
+        const decimal commissionValue = 0.18m;
 
-        var body = new CommissionAddModel(randomCurrencyFromId, randomCurrencyToId, currencyValue);
+        var body = new CommissionAddModel(randomCurrencyFromId, randomCurrencyToId, commissionValue);
         string token = await LoginAsUserAsync();
 
         // act
@@ -81,9 +81,9 @@ public class CommissionsControllerTests : IntegrationTest
         // arrange
         Guid randomCurrencyFromIdThatNotExistsInDatabase = Guid.NewGuid();
         Guid randomCurrencyToIdThatNotExistsInDatabase = Guid.NewGuid();
-        const decimal invalidCurrencyValue = Constraints.Commission.MaxCommissionValue + 0.01m;
+        const decimal invalidCommissionValue = Constraints.Commission.MaxCommissionValue + 0.01m;
 
-        var body = new CommissionAddModel(randomCurrencyFromIdThatNotExistsInDatabase, randomCurrencyToIdThatNotExistsInDatabase, invalidCurrencyValue);
+        var body = new CommissionAddModel(randomCurrencyFromIdThatNotExistsInDatabase, randomCurrencyToIdThatNotExistsInDatabase, invalidCommissionValue);
         string token = await LoginAsAdminAsync();
 
         // act
