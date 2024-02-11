@@ -22,6 +22,6 @@ public class CurrenciesController(ICurrencyService currencyService) : BaseContro
 	{
 		var dto = currencyAddModel.ToDTO();
 		var result = await currencyService.AddAsync(dto, cancellationToken);
-		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
+		return result.IsSuccess ? Created(string.Empty, result.Value) : BadRequest(result.ErrorMessage);
 	}
 }

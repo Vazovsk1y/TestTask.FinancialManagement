@@ -13,7 +13,7 @@ public class MoneyOperationsController(IMoneyOperationService moneyOperationServ
 	{
 		var dto = enrollModel.ToDTO();
 		var result = await moneyOperationService.EnrollAsync(dto, cancellationToken);
-		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
+		return result.IsSuccess ? Created(string.Empty, result.Value) : BadRequest(result.ErrorMessage);
 	}
 
 	[HttpPost("withdrawal")]
@@ -21,7 +21,7 @@ public class MoneyOperationsController(IMoneyOperationService moneyOperationServ
 	{
 		var dto = withdrawalModel.ToDTO();
 		var result = await moneyOperationService.WithdrawalAsync(dto, cancellationToken);
-		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
+		return result.IsSuccess ? Created(string.Empty, result.Value) : BadRequest(result.ErrorMessage);
 	}
 
 	[HttpPost("transfer")]
@@ -29,6 +29,6 @@ public class MoneyOperationsController(IMoneyOperationService moneyOperationServ
 	{
 		var dto = transfer.ToDTO();
 		var result = await moneyOperationService.TransferAsync(dto, cancellationToken);
-		return result.IsSuccess ? Ok() : BadRequest(result.ErrorMessage);
+		return result.IsSuccess ? Created(string.Empty, result.Value) : BadRequest(result.ErrorMessage);
 	}
 }

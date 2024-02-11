@@ -17,7 +17,7 @@ public class CommissionsController(ICommissionService commissionService) : Autho
 	{
 		var dto = commissionAddModel.ToDTO();
 		var result = await commissionService.AddAsync(dto, cancellationToken);
-		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
+		return result.IsSuccess ? Created(string.Empty, result.Value) : BadRequest(result.ErrorMessage);
 	}
 
 	[HttpGet]

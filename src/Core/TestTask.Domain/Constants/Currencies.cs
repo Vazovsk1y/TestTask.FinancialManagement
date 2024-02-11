@@ -2,7 +2,7 @@
 
 public static class Currencies
 {
-    public static readonly IReadOnlyCollection<(string Title, string AlphabeticCode, string NumericCode)> Supported = new List<(string, string, string)>()
+    public static readonly IReadOnlyList<(string Title, string AlphabeticCode, string NumericCode)> Supported = new List<(string, string, string)>()
     {
         ("UAE Dirham", "AED", "784"),
         ("Afghan Afghani", "AFN", "971"),

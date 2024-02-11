@@ -1,14 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TestTask.Domain.Constants;
+﻿using TestTask.Domain.Constants;
 using TestTask.Domain.Entities;
 
 namespace TestTask.DAL;
 
-internal static class DatabaseSeeder
+public interface IDatabaseSeeder
+{
+	void Seed();
+}
+
+internal class DatabaseSeeder(TestTaskDbContext dbContext) : IDatabaseSeeder
 {
 	private const int CurrenciesCount = 5;
+	private readonly TestTaskDbContext _dbContext = dbContext;
 
-	private static readonly IList<Currency> _currencies = Currencies
+    private static readonly IList<Currency> _currencies = Currencies
 	.Supported
 	.Take(CurrenciesCount)
 	.Select(e => new Currency
@@ -105,12 +110,12 @@ internal static class DatabaseSeeder
 	    }
 	}
 
-	public static void SeedData(this ModelBuilder modelBuilder)
+	public void Seed()
 	{
-		modelBuilder.Entity<Currency>().HasData(_currencies);
-		modelBuilder.Entity<Role>().HasData(_roles);
-		modelBuilder.Entity<Commission>().HasData(Commissions);
-		modelBuilder.Entity<ExchangeRate>().HasData(ExchangeRates);
+		if (!IsAbleToSeed())
+		{
+			return;
+		}
 
 		var users = _usersSeed
 		.Select(e => new User
@@ -120,8 +125,6 @@ internal static class DatabaseSeeder
 			PasswordHash = BCrypt.Net.BCrypt.HashPassword(e.Password),
 		}).ToList();
 
-		modelBuilder.Entity<User>().HasData(users);
-
 		var userRoles = new List<UserRole>();
         foreach (var user in users)
         {
@@ -129,16 +132,37 @@ internal static class DatabaseSeeder
 			userRoles.AddRange(first.Roles.Select(i => new UserRole { RoleId = _roles.Single(e => e.Title == i).Id, UserId = user.Id }));
         }
 
-		modelBuilder.Entity<UserRole>().HasData(userRoles);
-
 		var moneyAccounts = new List<MoneyAccount>();
         foreach (var currency in _currencies)
         {
 			moneyAccounts.AddRange(users.Select(e => new MoneyAccount { CurrencyId = currency.Id, Balance = 0m, UserId = e.Id }));
         }
 
-		modelBuilder.Entity<MoneyAccount>().HasData(moneyAccounts);
+        _dbContext.Currencies.AddRange(_currencies);
+        _dbContext.Roles.AddRange(_roles);
+        _dbContext.Commissions.AddRange(Commissions);
+        _dbContext.ExchangeRates.AddRange(ExchangeRates);
+        _dbContext.Users.AddRange(users);
+        _dbContext.UserRoles.AddRange(userRoles);
+        _dbContext.MoneyAccounts.AddRange(moneyAccounts);
+
+		_dbContext.SaveChanges();
     }
+
+	private bool IsAbleToSeed()
+	{
+		return new bool[] 
+		{ 
+			_dbContext.Currencies.Any(),
+			_dbContext.Roles.Any(),
+			_dbContext.Commissions.Any(),
+			_dbContext.ExchangeRates.Any(),
+			_dbContext.Users.Any(),
+			_dbContext.MoneyAccounts.Any(),
+			_dbContext.UserRoles.Any(),
+		}
+		.All(e => e is false);
+	}
 
 	private class UserSeedModel
 	{

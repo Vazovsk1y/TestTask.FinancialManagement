@@ -28,7 +28,7 @@ public static partial class Constraints
 
 	public static class CurrencyCodes
 	{
-		public const int CodeLength = 3;
+		public const int CodeMaxLength = 3;
 
 		public static bool IsNumericCode(string numericCode)
 		{
@@ -37,7 +37,7 @@ public static partial class Constraints
 				return false;
 			}
 
-			return numericCode.Length == CodeLength && numericCode.All(char.IsDigit);
+			return numericCode.Length <= CodeMaxLength && numericCode.All(char.IsDigit);
 		}
 
 		public static bool IsAlphabeticCode(string alphabeticCode)

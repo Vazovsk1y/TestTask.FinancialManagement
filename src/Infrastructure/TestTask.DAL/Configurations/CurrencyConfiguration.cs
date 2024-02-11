@@ -15,10 +15,10 @@ internal class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
 
 		builder.HasIndex(e => e.Title).IsUnique();
 
-		builder.Property(e => e.AlphabeticCode).HasMaxLength(Constraints.CurrencyCodes.CodeLength);
+		builder.Property(e => e.AlphabeticCode).HasMaxLength(Constraints.CurrencyCodes.CodeMaxLength);
 		builder.HasIndex(e => e.AlphabeticCode).IsUnique();
 
-		builder.Property(e => e.NumericCode).HasMaxLength(Constraints.CurrencyCodes.CodeLength);
+		builder.Property(e => e.NumericCode).HasMaxLength(Constraints.CurrencyCodes.CodeMaxLength);
 		builder.HasIndex(e => e.NumericCode).IsUnique();
 	}
 }

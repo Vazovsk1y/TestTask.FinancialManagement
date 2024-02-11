@@ -7,5 +7,6 @@ namespace TestTask.DAL;
 public static class Registrator
 {
 	public static IServiceCollection AddDataAccessLayer(this IServiceCollection services, IConfiguration configuration) => services
+		.AddScoped<IDatabaseSeeder, DatabaseSeeder>()
 		.AddDbContext<TestTaskDbContext>(e => e.UseSqlServer(configuration.GetConnectionString("Default")));
 }

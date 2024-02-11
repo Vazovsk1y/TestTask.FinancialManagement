@@ -15,7 +15,7 @@ public class MoneyAccountsController(
 	public async Task<IActionResult> CreateMoneyAccount(MoneyAccountCreateModel createModel, CancellationToken cancellationToken)
 	{
 		var result = await moneyAccountService.CreateAsync(new CurrencyId(createModel.CurrencyId), cancellationToken);
-		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
+		return result.IsSuccess ? Created(string.Empty, result.Value) : BadRequest(result.ErrorMessage);
 	}
 
 	[HttpGet("{id}")]
