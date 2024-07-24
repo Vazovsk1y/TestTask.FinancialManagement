@@ -42,25 +42,12 @@ public static partial class Constraints
 
 		public static bool IsAlphabeticCode(string alphabeticCode)
 		{
-			if (string.IsNullOrWhiteSpace(alphabeticCode))
-			{
-				return false;
-			}
-
-			foreach (char c in alphabeticCode)
-			{
-				if (!IsLatinLetter(c) || !char.IsUpper(c))
-				{
-					return false;
-				}
-			}
-
-			return true;
+			return !string.IsNullOrWhiteSpace(alphabeticCode) && alphabeticCode.All(c => IsLatinLetter(c) && char.IsUpper(c));
 		}
 
 		private static bool IsLatinLetter(char letter)
 		{
-			return (letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z');
+			return letter is >= 'A' and <= 'Z' or >= 'a' and <= 'z';
 		}
 	}
 
@@ -69,7 +56,7 @@ public static partial class Constraints
 		public const int MaxTitleLength = 15;
     }
 
-	public static partial class User
+	public static class User
 	{
 		public const int MaxFullNameLength = 50;
 

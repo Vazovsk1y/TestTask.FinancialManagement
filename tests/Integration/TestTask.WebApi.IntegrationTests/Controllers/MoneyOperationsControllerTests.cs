@@ -135,7 +135,7 @@ public class MoneyOperationsControllerTests : IntegrationTest
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         moneyOperation.Should().NotBeNull();
         moneyOperation?.MoneyAccountFromId.Should().Be(moneyAccount.Id);
-        moneyOperation?.MoveType.Should().Be(MoneyMoveTypes.Substracting);
+        moneyOperation?.MoveType.Should().Be(MoneyMoveTypes.Subtracting);
         moneyOperation?.OperationType.Should().Be(MoneyOperationTypes.Withdrawal);
     }
 
@@ -228,7 +228,7 @@ public class MoneyOperationsControllerTests : IntegrationTest
 
         sub?.MoneyAccountFromId.Should().Be(moneyAccountFrom.Id);
         sub?.MoneyAccountToId.Should().Be(moneyAccountTo.Id);
-        sub?.MoveType.Should().Be(MoneyMoveTypes.Substracting);
+        sub?.MoveType.Should().Be(MoneyMoveTypes.Subtracting);
         sub?.OperationType.Should().Be(MoneyOperationTypes.Transfer);
     }
 

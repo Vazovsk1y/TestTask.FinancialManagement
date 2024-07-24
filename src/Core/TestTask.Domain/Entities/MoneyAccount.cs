@@ -10,11 +10,9 @@ public class MoneyAccount : Entity<MoneyAccountId>
 
 	public required decimal Balance { get; set; }
 
-	public Currency? Currency { get; set; }
+	public Currency? Currency { get; init; }
 
-	public User? User { get; set; }
-
-	public MoneyAccount() : base() { }
+	public User? User { get; init; }
 }
 
 public record MoneyAccountId(Guid Value) : IValueId<MoneyAccountId>

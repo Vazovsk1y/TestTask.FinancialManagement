@@ -12,11 +12,9 @@ public class ExchangeRate : Entity<ExchangeRateId>
 
     public required DateTimeOffset UpdatedAt { get; set; }
 
-    public Currency? From { get; set; }
+    public Currency? From { get; init; }
 
-    public Currency? To { get; set; }
-
-    public ExchangeRate() : base() { }
+    public Currency? To { get; init; }
 }
 
 public record ExchangeRateId(Guid Value) : IValueId<ExchangeRateId>

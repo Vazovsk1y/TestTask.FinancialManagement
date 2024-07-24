@@ -4,13 +4,11 @@ namespace TestTask.Domain.Entities;
 
 public class Currency : Entity<CurrencyId>
 {
-	public required string Title { get; set; }
+	public required string Title { get; init; }
 
-	public required string AlphabeticCode { get; set; }
+	public required string AlphabeticCode { get; init; }
 
-	public required string NumericCode { get; set; }
-
-	public Currency() : base() { }
+	public required string NumericCode { get; init; }
 }
 
 public record CurrencyId(Guid Value) : IValueId<CurrencyId>

@@ -3,5 +3,5 @@
 public enum MoneyMoveTypes
 {
 	Adding,
-	Substracting
+	Subtracting
 }

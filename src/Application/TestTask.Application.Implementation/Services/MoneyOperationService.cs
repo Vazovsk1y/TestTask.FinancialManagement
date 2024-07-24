@@ -259,7 +259,7 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 			OperationDate = _clock.GetUtcNow(),
 			AppliedCommissionValue = decimal.Zero,
 			AppliedExchangeRate = decimal.Zero,
-			MoveType = MoneyMoveTypes.Substracting,
+			MoveType = MoneyMoveTypes.Subtracting,
 			OperationType = MoneyOperationTypes.Withdrawal,
 		};
 	}
@@ -298,7 +298,7 @@ internal class MoneyOperationService : BaseService, IMoneyOperationService
 			AppliedExchangeRate = exchangeRate,
 			OperationDate = _clock.GetUtcNow(),
 			MoneyAmount = finalAmount,
-			MoveType = MoneyMoveTypes.Substracting,
+			MoveType = MoneyMoveTypes.Subtracting,
 			OperationType = MoneyOperationTypes.Transfer
 		};
 
