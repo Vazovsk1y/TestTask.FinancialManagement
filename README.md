@@ -10,7 +10,7 @@ REST service for managing financial accounts.
 - The exchange system should transfer money from one account to another, converting from the first currency to the second at the appropriate exchange rate if necessary. The exchange rate is always a positive number not equal to zero. When converting from one user's account to another, the entered amount in the first currency is debited, and the calculated amount in the second currency is credited, minus a commission. The commission is calculated as the amount received in the second currency multiplied by the commission percentage. The commission percentage is a positive number greater than zero (default is 0.05%). The history of transfers, deposits, and withdrawals should be saved in the database.
 
 ## Functionality
-1. Register and authenticate a new user.
+1. Register/Login user.
 2. Retrieve all user accounts by their Id.
 3. Retrieve information on all user's financial transactions by their Id.
 4. Retrieve information on a specific user account by account Id.
