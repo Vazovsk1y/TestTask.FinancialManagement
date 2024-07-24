@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TestTask.Application.Contracts;
+using TestTask.Application.Implementation.Constants;
+using TestTask.Application.Implementation.Extensions;
 using TestTask.Application.Services;
 using TestTask.Application.Shared;
 using TestTask.DAL.SQLServer;
@@ -9,21 +11,21 @@ using TestTask.Domain.Entities;
 
 namespace TestTask.Application.Implementation.Services;
 
-internal class CommissionService : BaseService, ICommissionService
+internal class CommissionService(
+	TestTaskDbContext dbContext,
+	IUserProvider userProvider,
+	IServiceScopeFactory serviceScopeFactory)
+	: BaseService(dbContext, userProvider, serviceScopeFactory), ICommissionService
 {
-	public CommissionService(TestTaskDbContext dbContext, IUserProvider userProvider, IServiceScopeFactory serviceScopeFactory) : base(dbContext, userProvider, serviceScopeFactory)
-	{
-	}
-
 	public async Task<Result<CommissionId>> AddAsync(CommissionAddDTO commissionAddDTO, CancellationToken cancellationToken = default)
 	{
-		var requesterIdResult = _userProvider.GetCurrent();
+		var requesterIdResult = UserProvider.GetCurrent();
 		if (requesterIdResult.IsFailure)
 		{
 			return Result.Failure<CommissionId>(requesterIdResult.ErrorMessage);
 		}
 
-		var requester = await _dbContext
+		var requester = await DbContext
 			.Users
 			.Include(e => e.Roles)
 			.ThenInclude(e => e.Role)
@@ -41,14 +43,14 @@ internal class CommissionService : BaseService, ICommissionService
 		}
 
 		var commission = commissionCreationResult.Value;
-		_dbContext.Commissions.Add(commission);
-		await _dbContext.SaveChangesAsync(cancellationToken);
+		DbContext.Commissions.Add(commission);
+		await DbContext.SaveChangesAsync(cancellationToken);
 		return commission.Id;
 	}
 
 	public async Task<Result<IReadOnlyCollection<CommissionDTO>>> GetAllAsync(CancellationToken cancellationToken = default)
 	{
-		var result = await _dbContext
+		var result = await DbContext
 			.Commissions
 			.AsNoTracking()
 			.Include(e => e.To)
@@ -69,7 +71,7 @@ internal class CommissionService : BaseService, ICommissionService
 			return Result.Failure<Commission>(validationResult.ErrorMessage);
 		}
 
-		bool isAlreadyExists = await _dbContext
+		bool isAlreadyExists = await DbContext
 			.Commissions
 			.AnyAsync(e => e.CurrencyFromId == commissionAddDTO.CurrencyFromId && e.CurrencyToId == commissionAddDTO.CurrencyToId);
 
@@ -79,7 +81,7 @@ internal class CommissionService : BaseService, ICommissionService
 		}
 
 		var passedCurrencies = new List<CurrencyId>() { commissionAddDTO.CurrencyFromId, commissionAddDTO.CurrencyToId };
-		var isAllCurrenciesExists = _dbContext.Currencies.Where(e => passedCurrencies.Contains(e.Id)).Count() == passedCurrencies.Count;
+		var isAllCurrenciesExists = DbContext.Currencies.Count(e => passedCurrencies.Contains(e.Id)) == passedCurrencies.Count;
 		if (!isAllCurrenciesExists)
 		{
 			return Result.Failure<Commission>("Any of passed currencies id is not exists.");

@@ -7,24 +7,18 @@ using TestTask.DAL.SQLServer;
 
 namespace TestTask.Application.Implementation.Services;
 
-internal abstract class BaseService
-{
-	protected readonly TestTaskDbContext _dbContext;
-	protected readonly IUserProvider _userProvider;
-	protected readonly IServiceScopeFactory _scopeFactory;
-
-	protected BaseService(
+internal abstract class BaseService(
 	TestTaskDbContext dbContext,
 	IUserProvider userProvider,
 	IServiceScopeFactory serviceScopeFactory)
-	{
-		_dbContext = dbContext;
-		_userProvider = userProvider;
-		_scopeFactory = serviceScopeFactory;
-	}
+{
+	protected readonly TestTaskDbContext DbContext = dbContext;
+	protected readonly IUserProvider UserProvider = userProvider;
+	protected readonly IServiceScopeFactory ScopeFactory = serviceScopeFactory;
+
 	protected Result Validate(params object[] objects)
 	{
-		using var scope = _scopeFactory.CreateScope();
+		using var scope = ScopeFactory.CreateScope();
         foreach (var item in objects)
         {
 			var itemType = item.GetType();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using TestTask.Application.Implementation.Constants;
 using TestTask.Application.Services;
 using TestTask.Application.Shared;
 using TestTask.DAL.SQLServer;
@@ -30,11 +31,6 @@ internal class HttpContextUserProvider(
 		}
 
 		var userId = new UserId(result);
-		if (!dbContext.Users.Any(e => e.Id == userId))
-		{
-			return Result.Failure<UserId>(Errors.EntityWithPassedIdIsNotExists(nameof(User)));
-		}
-
-		return userId;
+		return dbContext.Users.Any(e => e.Id == userId) ? userId : Result.Failure<UserId>(Errors.EntityWithPassedIdIsNotExists(nameof(User)));
 	}
 }

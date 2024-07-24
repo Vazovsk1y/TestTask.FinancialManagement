@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TestTask.Application.Contracts;
+using TestTask.Application.Implementation.Constants;
+using TestTask.Application.Implementation.Extensions;
 using TestTask.Application.Services;
 using TestTask.Application.Shared;
 using TestTask.DAL.SQLServer;
@@ -9,14 +11,13 @@ using TestTask.Domain.Entities;
 
 namespace TestTask.Application.Implementation.Services;
 
-internal class UserService : BaseService, IUserService
+internal class UserService(
+	TestTaskDbContext dbContext,
+	IUserProvider userProvider,
+	IServiceScopeFactory serviceScopeFactory,
+	ITokenProvider tokenProvider)
+	: BaseService(dbContext, userProvider, serviceScopeFactory), IUserService
 {
-	private readonly ITokenProvider _tokenProvider;
-	public UserService(TestTaskDbContext dbContext, IUserProvider userProvider, IServiceScopeFactory serviceScopeFactory, ITokenProvider tokenProvider) : base(dbContext, userProvider, serviceScopeFactory)
-	{
-		_tokenProvider = tokenProvider;
-	}
-
 	public async Task<Result<TokenDTO>> LoginAsync(UserCredentialsDTO credentialsDTO, CancellationToken cancellationToken = default)
 	{
 		var validationResult = Validate(credentialsDTO);
@@ -25,7 +26,7 @@ internal class UserService : BaseService, IUserService
 			return Result.Failure<TokenDTO>(validationResult.ErrorMessage);
 		}
 
-		var user = await _dbContext
+		var user = await DbContext
 			.Users
 			.Include(e => e.Roles)
 			.ThenInclude(e => e.Role)
@@ -41,7 +42,7 @@ internal class UserService : BaseService, IUserService
 			return Result.Failure<TokenDTO>(Errors.Auth.InvalidCredentials);
 		}
 
-		string token = _tokenProvider.GenerateToken(user);
+		string token = tokenProvider.GenerateToken(user);
 
 		return new TokenDTO(token);
 	}
@@ -55,8 +56,8 @@ internal class UserService : BaseService, IUserService
 		}
 
 		var user = userCreationResult.Value;
-		_dbContext.Users.Add(user);
-		await _dbContext.SaveChangesAsync(cancellationToken);
+		DbContext.Users.Add(user);
+		await DbContext.SaveChangesAsync(cancellationToken);
 		return user.Id;
 	}
 
@@ -80,13 +81,13 @@ internal class UserService : BaseService, IUserService
 			PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDTO.Credentials.Password),
 		};
 
-		var defaultRole = await _dbContext.Roles.GetRoleByTitleAsync(DefaultRoles.User);
+		var defaultRole = await DbContext.Roles.GetRoleByTitleAsync(DefaultRoles.User);
 		user.Roles.Add(new UserRole { RoleId = defaultRole.Id, UserId = user.Id });
 		return user;
 	}
 
 	private async Task<bool> IsEmailAlreadyTaken(string email)
 	{
-		return await _dbContext.Users.AnyAsync(e => e.Email == email);
+		return await DbContext.Users.AnyAsync(e => e.Email == email);
 	}
 }

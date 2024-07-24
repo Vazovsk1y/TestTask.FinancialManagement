@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TestTask.Domain.Entities;
 
-namespace TestTask.Application.Implementation;
+namespace TestTask.Application.Implementation.Extensions;
 
-public static class Extensions
+public static class Common
 {
 	internal static async Task<Role> GetRoleByTitleAsync(this IQueryable<Role> roles, string roleTitle)
 	{

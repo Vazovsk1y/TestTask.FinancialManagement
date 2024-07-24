@@ -2,6 +2,7 @@ using FluentValidation;
 using Hangfire;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using TestTask.Application.Implementation;
+using TestTask.Application.Implementation.Extensions;
 using TestTask.BackgroundJobs;
 using TestTask.DAL.SQLServer.Extensions;
 using TestTask.ExchangeRateApi;

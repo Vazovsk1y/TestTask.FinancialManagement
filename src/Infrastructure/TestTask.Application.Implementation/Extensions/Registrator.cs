@@ -4,7 +4,7 @@ using TestTask.Application.Implementation.Services;
 using TestTask.Application.Implementation.Validators;
 using TestTask.Application.Services;
 
-namespace TestTask.Application.Implementation;
+namespace TestTask.Application.Implementation.Extensions;
 
 public static class Registrator
 {

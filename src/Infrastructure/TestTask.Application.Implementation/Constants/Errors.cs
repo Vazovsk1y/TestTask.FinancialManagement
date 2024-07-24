@@ -1,4 +1,4 @@
-﻿namespace TestTask.Application.Implementation;
+﻿namespace TestTask.Application.Implementation.Constants;
 
 public static class Errors
 {

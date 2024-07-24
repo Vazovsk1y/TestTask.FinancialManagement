@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Globalization;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -21,7 +22,7 @@ internal class JwtTokenProvider(IOptions<JwtOptions> jwtOptions) : ITokenProvide
 		{
 			new(JwtRegisteredClaimNames.Email, user.Email),
 			new(JwtRegisteredClaimNames.Sub, user.Id.Value.ToString()),
-			new(JwtRegisteredClaimNames.Exp, expiredDate.ToString()),
+			new(JwtRegisteredClaimNames.Exp, expiredDate.ToString(CultureInfo.InvariantCulture)),
 		};
 
 		var signingCredentials = new SigningCredentials(
