@@ -10,23 +10,20 @@ using TestTask.WebApi.ViewModels;
 
 namespace TestTask.WebApi.IntegrationTests.Controllers;
 
-public class MoneyOperationsControllerTests : IntegrationTest
+public class MoneyOperationsControllerTests(TestTaskWebApiApplicationFactory factory) : IntegrationTest(factory)
 {
     private const string Route = "api/money-operations";
-    public MoneyOperationsControllerTests(TestTaskWebApiApplicationFactory factory) : base(factory)
-    {
-    }
 
     [Fact]
     public async Task EnrollMoneyAccount_Should_Add_EnrolmentOperation_To_Database_AND_Return_Created_Status_Code_when_valid_body_passed()
     {
         // arrange
-        var (Title, AlphabeticCode, NumericCode) = Currencies.Supported[45];
+        var (title, alphabeticCode, numericCode) = Currencies.Supported[45];
         var randomValidCurrency = new Currency
         {
-            AlphabeticCode = AlphabeticCode,
-            NumericCode = NumericCode,
-            Title = Title,
+            AlphabeticCode = alphabeticCode,
+            NumericCode = numericCode,
+            Title = title,
         };
 
         var moneyAccount = new MoneyAccount
@@ -100,12 +97,12 @@ public class MoneyOperationsControllerTests : IntegrationTest
     public async Task WithdrawalMoneyAccount_Should_Add_WithdrawalOperation_To_Database_AND_Return_Created_Status_Code_when_valid_body_passed()
     {
         // arrange
-        var (Title, AlphabeticCode, NumericCode) = Currencies.Supported[33];
+        var (title, alphabeticCode, numericCode) = Currencies.Supported[33];
         var randomValidCurrency = new Currency
         {
-            AlphabeticCode = AlphabeticCode,
-            NumericCode = NumericCode,
-            Title = Title,
+            AlphabeticCode = alphabeticCode,
+            NumericCode = numericCode,
+            Title = title,
         };
 
         var moneyAccount = new MoneyAccount
@@ -177,12 +174,12 @@ public class MoneyOperationsControllerTests : IntegrationTest
     public async Task Transfer_Should_Add_Two_Operations_To_Database_AND_Return_Created_Status_Code_when_valid_body_passed()
     {
         // arrange
-        var (Title, AlphabeticCode, NumericCode) = Currencies.Supported[60];
+        var (title, alphabeticCode, numericCode) = Currencies.Supported[60];
         var randomValidCurrency = new Currency
         {
-            AlphabeticCode = AlphabeticCode,
-            NumericCode = NumericCode,
-            Title = Title,
+            AlphabeticCode = alphabeticCode,
+            NumericCode = numericCode,
+            Title = title,
         };
 
         var moneyAccountFrom = new MoneyAccount

@@ -8,19 +8,16 @@ using TestTask.WebApi.ViewModels;
 
 namespace TestTask.WebApi.IntegrationTests.Controllers;
 
-public class CurrenciesControllerTests : IntegrationTest
+public class CurrenciesControllerTests(TestTaskWebApiApplicationFactory factory) : IntegrationTest(factory)
 {
     private const string Route = "api/currencies";
-    public CurrenciesControllerTests(TestTaskWebApiApplicationFactory factory) : base(factory)
-    {
-    }
 
     [Fact]
     public async Task AddCurrency_Should_Add_Currency_To_Database_AND_Return_Created_Status_Code_when_valid_body_passed()
     {
         // arrange
-        var (Title, AlphabeticCode, NumericCode) = Currencies.Supported[20];
-        var body = new CurrencyAddModel(Title, AlphabeticCode, NumericCode);
+        var (title, alphabeticCode, numericCode) = Currencies.Supported[20];
+        var body = new CurrencyAddModel(title, alphabeticCode, numericCode);
         string token = await LoginAsAdminAsync();
 
         // act
