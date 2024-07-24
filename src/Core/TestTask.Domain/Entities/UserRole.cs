@@ -6,7 +6,7 @@ public class UserRole
 
 	public required RoleId RoleId { get; init; }
 
-	public User? User { get; set; }
+	public User? User { get; init; }
 
-	public Role? Role { get; set; }
+	public Role? Role { get; init; }
 }

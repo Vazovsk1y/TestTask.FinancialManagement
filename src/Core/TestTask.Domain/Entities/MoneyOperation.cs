@@ -21,11 +21,9 @@ public class MoneyOperation : Entity<MoneyOperationId>
 
 	public required MoneyMoveTypes MoveType { get; init; }
 
-	public MoneyAccount? From { get; set; }
+	public MoneyAccount? From { get; init; }
 
-	public MoneyAccount? To { get; set; }
-
-	public MoneyOperation() : base() { }
+	public MoneyAccount? To { get; init; }
 }
 
 public record MoneyOperationId(Guid Value) : IValueId<MoneyOperationId>

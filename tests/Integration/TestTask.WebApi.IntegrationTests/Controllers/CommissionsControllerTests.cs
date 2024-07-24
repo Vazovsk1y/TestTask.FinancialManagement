@@ -8,12 +8,9 @@ using TestTask.WebApi.ViewModels;
 
 namespace TestTask.WebApi.IntegrationTests.Controllers;
 
-public class CommissionsControllerTests : IntegrationTest
+public class CommissionsControllerTests(TestTaskWebApiApplicationFactory factory) : IntegrationTest(factory)
 {
     private const string Route = "api/commissions";
-    public CommissionsControllerTests(TestTaskWebApiApplicationFactory factory) : base(factory)
-    {
-    }
 
     [Fact]
     public async Task AddCommission_Should_Add_Commission_To_Database_AND_Return_Created_Status_Code_when_valid_body_passed()

@@ -12,11 +12,9 @@ public class Commission : Entity<CommissionId>
 
 	public required decimal Value { get; init; }
 
-	public Currency? From { get; set; }
+	public Currency? From { get; init; }
 
-	public Currency? To { get; set; }
-
-	public Commission() : base() { }
+	public Currency? To { get; init; }
 }
 
 public record CommissionId(Guid Value) : IValueId<CommissionId>

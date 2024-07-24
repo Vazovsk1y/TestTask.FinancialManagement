@@ -8,23 +8,20 @@ using FluentAssertions;
 
 namespace TestTask.WebApi.IntegrationTests.Controllers;
 
-public class MoneyAccountsControllerTests : IntegrationTest
+public class MoneyAccountsControllerTests(TestTaskWebApiApplicationFactory factory) : IntegrationTest(factory)
 {
     private const string Route = "api/money-accounts";
-    public MoneyAccountsControllerTests(TestTaskWebApiApplicationFactory factory) : base(factory)
-    {
-    }
 
     [Fact]
     public async Task CreateMoneyAccount_Should_Add_MoneyAccount_To_Database_AND_Return_Created_Status_Code_when_valid_body_passed()
     {
         // arrange
-        var (Title, AlphabeticCode, NumericCode) = Currencies.Supported[8];
+        var (title, alphabeticCode, numericCode) = Currencies.Supported[8];
         var accountCurrency = new Currency
         {
-            AlphabeticCode = AlphabeticCode,
-            NumericCode = NumericCode,
-            Title = Title,
+            AlphabeticCode = alphabeticCode,
+            NumericCode = numericCode,
+            Title = title,
         };
         _dbContext.Currencies.Add(accountCurrency);
         await _dbContext.SaveChangesAsync();

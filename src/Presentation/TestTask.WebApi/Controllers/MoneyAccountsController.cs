@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TestTask.Application.Services;
 using TestTask.Domain.Entities;
-using TestTask.WebApi.Common;
+using TestTask.WebApi.Controllers.Common;
 using TestTask.WebApi.ViewModels;
 
 namespace TestTask.WebApi.Controllers;

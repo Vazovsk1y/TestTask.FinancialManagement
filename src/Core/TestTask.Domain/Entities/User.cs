@@ -4,17 +4,15 @@ namespace TestTask.Domain.Entities;
 
 public class User : Entity<UserId>
 {
-	public required string Email { get; set; }
+	public required string Email { get; init; }
 
-	public required string FullName { get; set; }
+	public required string FullName { get; init; }
 
-	public required string PasswordHash { get; set; }
+	public required string PasswordHash { get; init; }
 
-	public ICollection<MoneyAccount> MoneyAccounts { get; set; } = new HashSet<MoneyAccount>();
+	public ICollection<MoneyAccount> MoneyAccounts { get; init; } = new HashSet<MoneyAccount>();
 
-	public ICollection<UserRole> Roles { get; set; } = new HashSet<UserRole>();
-
-	public User() : base() { }
+	public ICollection<UserRole> Roles { get; init; } = new HashSet<UserRole>();
 }
 
 public record UserId(Guid Value) : IValueId<UserId>

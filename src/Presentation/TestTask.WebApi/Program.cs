@@ -1,13 +1,13 @@
-using TestTask.DAL;
-using TestTask.Application.Implementation;
-using TestTask.WebApi;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using FluentValidation;
-using TestTask.WebApi.Validators;
-using TestTask.BackgroundJobs;
 using Hangfire;
-using TestTask.WebApi.Filters;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using TestTask.Application.Implementation.Extensions;
+using TestTask.BackgroundJobs;
+using TestTask.DAL.SQLServer.Extensions;
 using TestTask.ExchangeRateApi;
+using TestTask.WebApi.Extensions;
+using TestTask.WebApi.Infrastructure;
+using TestTask.WebApi.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,4 +54,7 @@ if (app.Environment.IsDevelopment())
 app.Run();
 
 
-public partial class Program { }
+namespace TestTask.WebApi
+{
+	public partial class Program { }
+}
