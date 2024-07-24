@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
 using TestTask.Application.Implementation.Services;
 
-namespace TestTask.WebApi;
+namespace TestTask.WebApi.Extensions;
 
 public static class Registrator
 {

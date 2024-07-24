@@ -1,13 +1,12 @@
 using FluentValidation;
 using Hangfire;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using TestTask.Application.Implementation;
 using TestTask.Application.Implementation.Extensions;
 using TestTask.BackgroundJobs;
 using TestTask.DAL.SQLServer.Extensions;
 using TestTask.ExchangeRateApi;
-using TestTask.WebApi;
-using TestTask.WebApi.Filters;
+using TestTask.WebApi.Extensions;
+using TestTask.WebApi.Infrastructure;
 using TestTask.WebApi.Validators;
 
 var builder = WebApplication.CreateBuilder(args);

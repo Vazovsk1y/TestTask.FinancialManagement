@@ -2,9 +2,9 @@
 using TestTask.DAL.SQLServer;
 using TestTask.DAL.SQLServer.Extensions;
 
-namespace TestTask.WebApi;
+namespace TestTask.WebApi.Extensions;
 
-public static class Extensions
+public static class Common
 {
 	public static void MigrateDatabase(this WebApplication app)
 	{

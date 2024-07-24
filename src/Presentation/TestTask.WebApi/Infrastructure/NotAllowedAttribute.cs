@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace TestTask.WebApi.Filters;
+namespace TestTask.WebApi.Infrastructure;
 
 public class NotAllowedAttribute : ActionFilterAttribute
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace TestTask.WebApi.Common;
+namespace TestTask.WebApi.Controllers.Common;
 
 [Authorize]
 public class AuthorizeController : BaseController

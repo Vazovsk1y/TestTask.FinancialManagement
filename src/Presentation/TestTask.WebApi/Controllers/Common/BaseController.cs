@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace TestTask.WebApi.Common;
+namespace TestTask.WebApi.Controllers.Common;
 
 [ApiController]
 [Route("api/[controller]")]

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.MsSql;
-using TestTask.DAL;
 using TestTask.DAL.SQLServer;
 using TestTask.Domain.Constants;
 using TestTask.Domain.Entities;

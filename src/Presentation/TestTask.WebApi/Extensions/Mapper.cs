@@ -2,7 +2,7 @@
 using TestTask.Domain.Entities;
 using TestTask.WebApi.ViewModels;
 
-namespace TestTask.WebApi;
+namespace TestTask.WebApi.Extensions;
 
 public static class Mapper
 {

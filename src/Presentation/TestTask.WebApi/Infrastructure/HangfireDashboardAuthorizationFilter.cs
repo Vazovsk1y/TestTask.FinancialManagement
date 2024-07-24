@@ -2,7 +2,7 @@
 using Hangfire.Dashboard;
 using TestTask.Domain.Constants;
 
-namespace TestTask.WebApi.Filters;
+namespace TestTask.WebApi.Infrastructure;
 
 internal class HangfireDashboardAuthorizationFilter : IDashboardAuthorizationFilter
 {
