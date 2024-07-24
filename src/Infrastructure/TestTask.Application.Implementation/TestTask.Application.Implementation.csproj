@@ -14,8 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\TestTask.DAL.SQLServer\TestTask.DAL.SQLServer.csproj" />
-    <ProjectReference Include="..\TestTask.Application\TestTask.Application.csproj" />
+    <ProjectReference Include="..\..\Application\TestTask.Application\TestTask.Application.csproj" />
+    <ProjectReference Include="..\..\Core\TestTask.Domain\TestTask.Domain.csproj" />
+    <ProjectReference Include="..\TestTask.DAL.SQLServer\TestTask.DAL.SQLServer.csproj" />
   </ItemGroup>
 
 </Project>

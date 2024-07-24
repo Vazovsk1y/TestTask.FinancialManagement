@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
-using TestTask.Application.Common;
 using TestTask.Application.Services;
+using TestTask.Application.Shared;
 using TestTask.DAL.SQLServer;
 using TestTask.Domain.Entities;
 

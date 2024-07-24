@@ -1,4 +1,4 @@
-﻿namespace TestTask.Application.Common;
+﻿namespace TestTask.Application.Shared;
 
 public record Result
 {

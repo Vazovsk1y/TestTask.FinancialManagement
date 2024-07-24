@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
-using TestTask.Application.Common;
 using TestTask.Application.Services;
+using TestTask.Application.Shared;
 using TestTask.DAL.SQLServer;
 
 namespace TestTask.Application.Implementation.Services;

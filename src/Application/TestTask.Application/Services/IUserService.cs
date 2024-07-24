@@ -1,5 +1,5 @@
-﻿using TestTask.Application.Common;
-using TestTask.Application.Contracts;
+﻿using TestTask.Application.Contracts;
+using TestTask.Application.Shared;
 using TestTask.Domain.Entities;
 
 namespace TestTask.Application.Services;
