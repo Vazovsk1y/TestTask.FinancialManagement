@@ -14,10 +14,10 @@ public static class Registrator
 
         services.AddMemoryCache();
 
-        services.AddHttpClient<IExchangeRateProvider, ExchangeRateProvider>((services, client) =>
+        services.AddHttpClient<IExchangeRateProvider, ExchangeRateProvider>((serviceProvider, client) =>
         {
             // stores in secrets.json
-            var options = services.GetRequiredService<IOptions<ExchangeRateProviderOptions>>().Value;
+            var options = serviceProvider.GetRequiredService<IOptions<ExchangeRateProviderOptions>>().Value;
             client.BaseAddress = new Uri(options.BaseAddress);
         });
 

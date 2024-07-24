@@ -14,7 +14,7 @@ public static class Registrator
             throw new InvalidOperationException("Hangfire connection string is not defined.");
 
         services.AddScoped<ExchangeRatesUpdateJob>();
-        services.AddHangfire((provider, config) => 
+        services.AddHangfire((_, config) => 
         {
             config
             .UseSqlServerStorage(hangfireDatabaseConnectionString, new SqlServerStorageOptions
