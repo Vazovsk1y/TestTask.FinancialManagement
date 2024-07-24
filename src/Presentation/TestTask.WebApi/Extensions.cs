@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TestTask.DAL;
+using TestTask.DAL.SQLServer;
+using TestTask.DAL.SQLServer.Extensions;
 
 namespace TestTask.WebApi;
 

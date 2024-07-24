@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Json;
 using TestTask.DAL;
+using TestTask.DAL.SQLServer;
 using TestTask.Domain.Entities;
 
 namespace TestTask.WebApi.IntegrationTests;

@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TestTask.DAL;
+using TestTask.DAL.SQLServer;
 
 #nullable disable
 
-namespace TestTask.DAL.Migrations
+namespace TestTask.DAL.SQLServer.Migrations
 {
     [DbContext(typeof(TestTaskDbContext))]
     partial class TestTaskDbContextModelSnapshot : ModelSnapshot

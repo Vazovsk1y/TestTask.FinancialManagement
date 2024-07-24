@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using TestTask.Application.Common;
 using TestTask.Application.Services;
-using TestTask.DAL;
+using TestTask.DAL.SQLServer;
 using TestTask.Domain.Entities;
 
 namespace TestTask.ExchangeRateApi;
@@ -17,15 +17,12 @@ internal class ExchangeRateProvider(
     IServiceScopeFactory serviceScopeFactory,
     IMemoryCache cache) : IExchangeRateProvider
 {
-    private readonly HttpClient _httpClient = httpClient;
     private readonly ExchangeRateProviderOptions _options = options.Value;
-    private readonly IServiceScopeFactory _serviceScopeFactory = serviceScopeFactory;
-    private readonly IMemoryCache _cache = cache;
-    private static readonly TimeSpan CACHE_DURATION = TimeSpan.FromHours(6);
+    private static readonly TimeSpan CacheDuration = TimeSpan.FromHours(6);
 
     public async Task<Result<ExchangeRateResponse>> GetRatesAsync(CurrencyId baseCurrencyId, CancellationToken cancellationToken = default)
     {
-        using var scope = _serviceScopeFactory.CreateScope();
+        using var scope = serviceScopeFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<TestTaskDbContext>();
 
         var baseCurrency = await dbContext
@@ -37,18 +34,18 @@ internal class ExchangeRateProvider(
             return Result.Failure<ExchangeRateResponse>($"Currency with passed id is not exists.");
         }
 
-        string baseCurencyCode = baseCurrency.AlphabeticCode;
-        string url = $"{_options.ApiKey}/latest/{baseCurencyCode}";
+        string baseCurrencyCode = baseCurrency.AlphabeticCode;
+        string url = $"{_options.ApiKey}/latest/{baseCurrencyCode}";
 
         ExchangeRateApiResponse? apiResponse;
-        if (_cache.TryGetValue<ExchangeRateApiResponse>(baseCurencyCode, out var responseFromCache))
+        if (cache.TryGetValue<ExchangeRateApiResponse>(baseCurrencyCode, out var responseFromCache))
         {
             apiResponse = responseFromCache;
         }
         else
         {
-            apiResponse = await _httpClient.GetFromJsonAsync<ExchangeRateApiResponse>(url, cancellationToken) ?? throw new Exception("Exchange rate api response was equal to null.");
-            _cache.Set(baseCurencyCode, apiResponse, CACHE_DURATION);
+            apiResponse = await httpClient.GetFromJsonAsync<ExchangeRateApiResponse>(url, cancellationToken) ?? throw new Exception("Exchange rate api response was equal to null.");
+            cache.Set(baseCurrencyCode, apiResponse, CacheDuration);
         }
 
         var currencies = await dbContext

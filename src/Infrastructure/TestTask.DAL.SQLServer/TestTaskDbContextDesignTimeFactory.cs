@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace TestTask.DAL;
+namespace TestTask.DAL.SQLServer;
 
-public class TestTaskDbContextDesingTimeFactory : IDesignTimeDbContextFactory<TestTaskDbContext>
+public class TestTaskDbContextDesignTimeFactory : IDesignTimeDbContextFactory<TestTaskDbContext>
 {
 	private const string ConnectionString = $"Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CurrecncyExchangeDb;Integrated Security=True;Connect Timeout=30;";
 

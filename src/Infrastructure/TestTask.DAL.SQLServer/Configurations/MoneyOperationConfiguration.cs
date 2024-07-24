@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using TestTask.DAL.SQLServer.Extensions;
 using TestTask.Domain.Entities;
 using TestTask.Domain.Constants;
 
-namespace TestTask.DAL.Configurations;
+namespace TestTask.DAL.SQLServer.Configurations;
 
 internal class MoneyOperationConfiguration : IEntityTypeConfiguration<MoneyOperation>
 {

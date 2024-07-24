@@ -1,7 +1,7 @@
 ﻿using TestTask.Domain.Constants;
 using TestTask.Domain.Entities;
 
-namespace TestTask.DAL;
+namespace TestTask.DAL.SQLServer.Extensions;
 
 public interface IDatabaseSeeder
 {
@@ -11,9 +11,8 @@ public interface IDatabaseSeeder
 internal class DatabaseSeeder(TestTaskDbContext dbContext) : IDatabaseSeeder
 {
 	private const int CurrenciesCount = 5;
-	private readonly TestTaskDbContext _dbContext = dbContext;
 
-    private static readonly IList<Currency> _currencies = Currencies
+	private static readonly IList<Currency> Currencies = Domain.Constants.Currencies
 	.Supported
 	.Take(CurrenciesCount)
 	.Select(e => new Currency
@@ -24,7 +23,7 @@ internal class DatabaseSeeder(TestTaskDbContext dbContext) : IDatabaseSeeder
 	})
 	.ToList();
 
-	private static readonly IReadOnlyCollection<Role> _roles = new string[]
+	private static readonly IReadOnlyCollection<Role> Roles = new string[]
 	{
 		DefaultRoles.User,
 		DefaultRoles.Admin
@@ -35,7 +34,7 @@ internal class DatabaseSeeder(TestTaskDbContext dbContext) : IDatabaseSeeder
 	})
 	.ToList();
 
-	private static readonly IReadOnlyCollection<UserSeedModel> _usersSeed = new UserSeedModel[]
+	private static readonly IReadOnlyCollection<UserSeedModel> UsersSeed = new UserSeedModel[]
 	{
 		new()
 		{
@@ -58,16 +57,16 @@ internal class DatabaseSeeder(TestTaskDbContext dbContext) : IDatabaseSeeder
         get
         {
             var result = new List<Commission>();
-            for (int i = 0; i < _currencies.Count; i++)
+            for (int i = 0; i < Currencies.Count; i++)
             {
-                for (int j = 0; j < _currencies.Count; j++)
+                for (int j = 0; j < Currencies.Count; j++)
                 {
                     if (j != i)
 					{
 						var commission = new Commission
 						{
-							CurrencyFromId = _currencies[i].Id,
-							CurrencyToId = _currencies[j].Id,
+							CurrencyFromId = Currencies[i].Id,
+							CurrencyToId = Currencies[j].Id,
 							Value = (decimal)(Random.Shared.NextDouble() * (10.0 - 0.1) + 0.1),
                         };
 
@@ -87,16 +86,16 @@ internal class DatabaseSeeder(TestTaskDbContext dbContext) : IDatabaseSeeder
 			var result = new List<ExchangeRate>();
 			var date = DateTimeOffset.UtcNow;
 
-            for (int i = 0; i < _currencies.Count; i++)
+            for (var i = 0; i < Currencies.Count; i++)
             {
-                for (int j = 0; j < _currencies.Count; j++)
+                for (int j = 0; j < Currencies.Count; j++)
                 {
                     if (i != j)
 					{
 						var exchangeRate = new ExchangeRate
 						{
-							CurrencyFromId = _currencies[i].Id,
-							CurrencyToId = _currencies[j].Id,
+							CurrencyFromId = Currencies[i].Id,
+							CurrencyToId = Currencies[j].Id,
 							Value = (decimal)(Random.Shared.NextDouble() * (10.0 - 0.1) + 0.1),
 							UpdatedAt = date,
 						};
@@ -117,7 +116,7 @@ internal class DatabaseSeeder(TestTaskDbContext dbContext) : IDatabaseSeeder
 			return;
 		}
 
-		var users = _usersSeed
+		var users = UsersSeed
 		.Select(e => new User
 		{
 			Email = e.Email,
@@ -128,38 +127,38 @@ internal class DatabaseSeeder(TestTaskDbContext dbContext) : IDatabaseSeeder
 		var userRoles = new List<UserRole>();
         foreach (var user in users)
         {
-			var first = _usersSeed.Single(e => e.Email == user.Email);
-			userRoles.AddRange(first.Roles.Select(i => new UserRole { RoleId = _roles.Single(e => e.Title == i).Id, UserId = user.Id }));
+			var first = UsersSeed.Single(e => e.Email == user.Email);
+			userRoles.AddRange(first.Roles.Select(i => new UserRole { RoleId = Roles.Single(e => e.Title == i).Id, UserId = user.Id }));
         }
 
 		var moneyAccounts = new List<MoneyAccount>();
-        foreach (var currency in _currencies)
+        foreach (var currency in Currencies)
         {
 			moneyAccounts.AddRange(users.Select(e => new MoneyAccount { CurrencyId = currency.Id, Balance = 0m, UserId = e.Id }));
         }
 
-        _dbContext.Currencies.AddRange(_currencies);
-        _dbContext.Roles.AddRange(_roles);
-        _dbContext.Commissions.AddRange(Commissions);
-        _dbContext.ExchangeRates.AddRange(ExchangeRates);
-        _dbContext.Users.AddRange(users);
-        _dbContext.UserRoles.AddRange(userRoles);
-        _dbContext.MoneyAccounts.AddRange(moneyAccounts);
+        dbContext.Currencies.AddRange(Currencies);
+        dbContext.Roles.AddRange(Roles);
+        dbContext.Commissions.AddRange(Commissions);
+        dbContext.ExchangeRates.AddRange(ExchangeRates);
+        dbContext.Users.AddRange(users);
+        dbContext.UserRoles.AddRange(userRoles);
+        dbContext.MoneyAccounts.AddRange(moneyAccounts);
 
-		_dbContext.SaveChanges();
+		dbContext.SaveChanges();
     }
 
 	private bool IsAbleToSeed()
 	{
 		return new bool[] 
 		{ 
-			_dbContext.Currencies.Any(),
-			_dbContext.Roles.Any(),
-			_dbContext.Commissions.Any(),
-			_dbContext.ExchangeRates.Any(),
-			_dbContext.Users.Any(),
-			_dbContext.MoneyAccounts.Any(),
-			_dbContext.UserRoles.Any(),
+			dbContext.Currencies.Any(),
+			dbContext.Roles.Any(),
+			dbContext.Commissions.Any(),
+			dbContext.ExchangeRates.Any(),
+			dbContext.Users.Any(),
+			dbContext.MoneyAccounts.Any(),
+			dbContext.UserRoles.Any(),
 		}
 		.All(e => e is false);
 	}

@@ -19,7 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Application\TestTask.Application.Implementation\TestTask.Application.Implementation.csproj" />
     <ProjectReference Include="..\..\Infrastructure\TestTask.BackgroundJobs\TestTask.BackgroundJobs.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\TestTask.DAL\TestTask.DAL.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\TestTask.DAL.SQLServer\TestTask.DAL.SQLServer.csproj" />
     <ProjectReference Include="..\..\Infrastructure\TestTask.ExchangeRateApi\TestTask.ExchangeRateApi.csproj" />
   </ItemGroup>
 

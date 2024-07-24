@@ -1,4 +1,4 @@
-using TestTask.DAL;
+using TestTask.DAL.SQLServer;
 using TestTask.Application.Implementation;
 using TestTask.WebApi;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
@@ -6,6 +6,7 @@ using FluentValidation;
 using TestTask.WebApi.Validators;
 using TestTask.BackgroundJobs;
 using Hangfire;
+using TestTask.DAL.SQLServer.Extensions;
 using TestTask.WebApi.Filters;
 using TestTask.ExchangeRateApi;
 

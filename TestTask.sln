@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestTask.Application", "src
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{469E8A16-F195-47C6-9F19-84C0CEB49BED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestTask.DAL", "src\Infrastructure\TestTask.DAL\TestTask.DAL.csproj", "{3FD05A98-F550-4785-913F-112BFD431F2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestTask.DAL.SQLServer", "src\Infrastructure\TestTask.DAL.SQLServer\TestTask.DAL.SQLServer.csproj", "{3FD05A98-F550-4785-913F-112BFD431F2D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestTask.Application.Implementation", "src\Application\TestTask.Application.Implementation\TestTask.Application.Implementation.csproj", "{8C92E80F-C596-40B9-A571-399A4374DA5E}"
 EndProject

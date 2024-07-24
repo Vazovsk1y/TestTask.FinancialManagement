@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TestTask.Application.Common;
 using TestTask.Application.Contracts;
 using TestTask.Application.Services;
-using TestTask.DAL;
+using TestTask.DAL.SQLServer;
 using TestTask.Domain.Constants;
 using TestTask.Domain.Entities;
 

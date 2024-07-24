@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.MsSql;
 using TestTask.DAL;
+using TestTask.DAL.SQLServer;
 using TestTask.Domain.Constants;
 using TestTask.Domain.Entities;
 using TestTask.WebApi.ViewModels;
@@ -21,7 +22,7 @@ public class TestTaskWebApiApplicationFactory :
         .WithCleanUp(true)
         .Build();
 
-    private static readonly IReadOnlyCollection<Role> __roles = new string[]
+    private static readonly IReadOnlyCollection<Role> Roles = new string[]
     {
         DefaultRoles.User,
         DefaultRoles.Admin
@@ -90,8 +91,8 @@ public class TestTaskWebApiApplicationFactory :
         using var scope = Server.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<TestTaskDbContext>();
 
-        var adminRole = __roles.Single(e => e.Title == DefaultRoles.Admin);
-        var userRole = __roles.Single(e => e.Title == DefaultRoles.User);
+        var adminRole = Roles.Single(e => e.Title == DefaultRoles.Admin);
+        var userRole = Roles.Single(e => e.Title == DefaultRoles.User);
 
         var admin = new User
         {
@@ -116,7 +117,7 @@ public class TestTaskWebApiApplicationFactory :
 
         dbContext.Users.AddRange(admin, simpleUser);
         dbContext.UserRoles.AddRange(usersRoles);
-        dbContext.Roles.AddRange(__roles);
+        dbContext.Roles.AddRange(Roles);
 
         await dbContext.SaveChangesAsync();
     }

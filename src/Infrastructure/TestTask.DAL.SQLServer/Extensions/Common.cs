@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TestTask.Domain.Common;
 
-namespace TestTask.DAL;
+namespace TestTask.DAL.SQLServer.Extensions;
 
-internal static class Extensions
+internal static class Common
 {
     public static void ConfigureId<TEntity, TId>(this EntityTypeBuilder<TEntity> typeBuilder)
         where TEntity : Entity<TId>

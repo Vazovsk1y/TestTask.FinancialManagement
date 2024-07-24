@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TestTask.DAL.Migrations
+namespace TestTask.DAL.SQLServer.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration

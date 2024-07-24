@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace TestTask.DAL;
+namespace TestTask.DAL.SQLServer.Extensions;
 
 public static class Registrator
 {

@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using TestTask.Application.Common;
 using TestTask.Application.Services;
-using TestTask.DAL;
+using TestTask.DAL.SQLServer;
 using TestTask.Domain.Entities;
 
 namespace TestTask.Application.Implementation.Services;

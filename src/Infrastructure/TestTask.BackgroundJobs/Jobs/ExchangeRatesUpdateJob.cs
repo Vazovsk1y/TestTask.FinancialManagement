@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TestTask.Application.Services;
-using TestTask.DAL;
+using TestTask.DAL.SQLServer;
 using TestTask.Domain.Entities;
 
 namespace TestTask.BackgroundJobs.Jobs;

@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\TestTask.DAL\TestTask.DAL.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\TestTask.DAL.SQLServer\TestTask.DAL.SQLServer.csproj" />
     <ProjectReference Include="..\TestTask.Application\TestTask.Application.csproj" />
   </ItemGroup>
 
